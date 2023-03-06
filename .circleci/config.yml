@@ -6,6 +6,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Build sap code 
+          command: |
+            cp -rf core-customize/hybris/bin/custom /opt/hybris/bin/
+            cp -rf core-customize/hybris/config/localdev.properties /opt/hybris/config/local.properties
+            cp -rf core-customize/hybris/config/localextensions.xml /opt/hybris/config
+            chmod -R 777 /opt/hybris/bin/platform
+            cd /opt/hybris/bin/platform
+            ./setantenv.sh
+            ant clean all 
+      - run:
           name: Install Sonarqube scanner
           command: |
             apt-get update -y
@@ -19,16 +29,6 @@ jobs:
             export SONAR_SCANNER_OPTS="-Xmx2048m"
             ant clean test || true
             ant sonarcheck -Dsonar.sources=. -Dsonar.inclusions=core-customize/hybris/bin/custom -Dant.test.failure.ignore=true -Dsonar.projectKey=OCA -Dsonar.host.url=https://sonar.deloittedigital.studio -Dsonar.login=a8cf16b7391d1872c4660d2d7054833ae4d8dc8d
-      - run:
-          name: Build sap code 
-          command: |
-            cp -rf core-customize/hybris/bin/custom /opt/hybris/bin/
-            cp -rf core-customize/hybris/config/localdev.properties /opt/hybris/config/local.properties
-            cp -rf core-customize/hybris/config/localextensions.xml /opt/hybris/config
-            chmod -R 777 /opt/hybris/bin/platform
-            cd /opt/hybris/bin/platform
-            ./setantenv.sh
-            ant clean all 
 workflows:
   build:
     jobs:
