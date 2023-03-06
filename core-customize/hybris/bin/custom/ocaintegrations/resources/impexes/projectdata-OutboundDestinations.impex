@@ -1,0 +1,32 @@
+$oAuthUrl = https://oca-sap-ci-dev.authentication.us21.hana.ondemand.com/oauth/token
+$clientId = sb-1c79c4c8-4cb4-482c-9889-32142fc9ae49!b6541|it-rt-oca-sap-ci-dev!b46
+$clientSecret = 78baada8-7020-4254-9721-7ec880a9acde$PWSHlFgR2FpmStS25XvBXkRyGHSPbqpNkDY7pLLOa2g=
+
+
+
+# ##############################################################
+INSERT_UPDATE ConsumedOAuthCredential;id[unique=true];clientId;clientSecret;oAuthUrl
+                                     ;testCredential;$clientId;$clientSecret;$oAuthUrl
+
+
+
+###############################################################
+# This sets up the endpoint called "local-hybris."
+# #############################################################
+INSERT_UPDATE Endpoint; id[unique = true]; version[unique = true];name; specUrl
+                      ; local-hybris ; unknown ; local-hybris; https://localhost:9002/odata2webservices/OutboundFreightCost/$metadata
+###############################################################
+# This sets up the destination target called "testDestinationTarget."
+# It will be used in the ConsumedDestination.
+# #############################################################
+INSERT_UPDATE DestinationTarget; id[unique = true]
+                               ; freightPriceDestination
+##############################################################
+# This sets up a ConsumedDestination called "platform-basic."
+# It uses the Endpoint and BasicCredential created above. The user calls
+# the Outbound Service with the destination ID (e.g. "platform-basic").
+# The Outbound Service looks up the details of the destination by ID,
+# so it knows where to send the data
+# ############################################################
+INSERT_UPDATE ConsumedDestination; id[unique = true]; url; endpoint(id,version); credential(id); destinationTarget(id)
+                                 ; freightPriceConsumedDestination ; https://oca-sap-ci-dev.it-cpi013-rt.cfapps.us21.hana.ondemand.com/http/freightRequest ; local-hybris:unknown; testCredential; freightPriceDestination

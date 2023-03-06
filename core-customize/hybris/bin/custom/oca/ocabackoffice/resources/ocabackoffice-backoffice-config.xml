@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<config xmlns="http://www.hybris.com/cockpit/config"
+        xmlns:y="http://www.hybris.com/cockpit/config/hybris"
+        xmlns:yc="http://www.hybris.com/cockpitng/config/common"
+        xmlns:ea="http://www.hybris.com/cockpitng/component/editorArea"
+		xmlns:na="http://www.hybris.com/cockpitng/config/notifications">
+
+	<context merge-by="module" component="editorareaactions" type="Consignment">
+		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
+			<y:group qualifier="common">
+				<y:label>actiongroup.common</y:label>				
+				<y:action action-id="com.olympus.oca.commerce.backoffice.actions.confirmpickupaction" property="currentObject"/>				
+			</y:group>
+		</y:actions>
+    </context>
+
+	<!-- Notification Area-->
+	<context component="notification-area">
+	    <na:notification-area>	        
+	        <na:notifications eventType="ocabackoffice.confirmpickup.event" level="SUCCESS">
+	            <na:message>hmc.action.confirmpickup.success</na:message>
+	        </na:notifications>
+	   </na:notification-area>
+	</context>
+
+	<context merge-by="type" parent="Product" type="GenericVariantProduct" component="editor-area">
+		<ea:editorArea name="">
+			<ea:essentials>
+				<ea:essentialSection name="hmc.essential">
+					<ea:attribute qualifier="code"/>
+					<ea:attribute qualifier="name"/>
+					<ea:attribute qualifier="catalogVersion"/>
+					<ea:attribute qualifier="approvalStatus"/>
+				</ea:essentialSection>
+			</ea:essentials>
+			<ea:tab name="hmc.tab.product.properties" position="2" >
+				<ea:section name="hmc.section.catalog_and_validity">
+					<ea:attribute qualifier="onlineDate"/>
+					<ea:attribute qualifier="offlineDate"/>
+				</ea:section>
+				<ea:section name="hmc.product.descriptions">
+					<ea:attribute editor="com.hybris.cockpitng.editor.localized(com.hybris.cockpitng.editor.wysiwyg)"
+								  qualifier="description"/>
+					<ea:attribute qualifier="unit"/>
+				</ea:section>
+			</ea:tab>
+			<ea:customTab name="hmc.tab.attribute" spring-bean="classificationTabEditorAreaRenderer" position="6">
+				<ea:section name="hmc.section.product.untypedfeatures">
+					<ea:attribute qualifier="untypedFeatures" description="hmc.text.product.untypedfeatures"/>
+				</ea:section>
+			</ea:customTab>
+			<ea:tab name="hmc.tab.product.categorysystem" position="10">
+				<ea:section name="hmc.section.product.productincategory">
+					<ea:attribute qualifier="supercategories"/>
+					<ea:attribute qualifier="classificationClasses" merge-mode="remove"/>
+				</ea:section>
+				<ea:section name="hmc.section.product.productreferences">
+					<ea:attribute qualifier="productReferences"/>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.prices"
+					position="14">
+				<ea:section name="hmc.section.product.pricesdiscounts">
+					<ea:panel colspan="2" name="panel.europe1Prices" rowspan="2">
+						<ea:attribute qualifier="europe1Prices" description="hmc.text.product.pg"
+									  editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+							<ea:editor-parameter>
+								<ea:name>listConfigContext</ea:name>
+								<ea:value>europe1PricesListView</ea:value>
+							</ea:editor-parameter>
+							<ea:editor-parameter>
+								<ea:name>disableRemoveReference</ea:name>
+								<ea:value>product == null</ea:value>
+							</ea:editor-parameter>
+							<ea:editor-parameter>
+								<ea:name>configurableFlowConfigCtx</ea:name>
+								<ea:value>create-wizard-no-save</ea:value>
+							</ea:editor-parameter>
+						</ea:attribute>
+					</ea:panel>
+					<ea:attribute qualifier="minOrderQuantity"/>
+					<ea:attribute qualifier="maxOrderQuantity"/>
+					<ea:attribute qualifier="priceQuantity"/>
+					<ea:attribute qualifier="Europe1PriceFactory_PPG" description="hmc.text.product.pg"/>
+				</ea:section>
+                <ea:section name="hmc.section.product.discounts">
+					<ea:panel colspan="2" name="panel.europe1Discounts" rowspan="2">
+                        <ea:attribute qualifier="europe1Discounts" editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+							<ea:editor-parameter>
+								<ea:name>listConfigContext</ea:name>
+								<ea:value>europe1DiscountsListView</ea:value>
+							</ea:editor-parameter>
+						</ea:attribute>
+					</ea:panel>
+					<ea:attribute qualifier="Europe1PriceFactory_PDG" description="hmc.text.product.dg"/>
+					<ea:attribute qualifier="Europe1PriceFactory_PTG" description="hmc.text.product.dg"/>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.multimedia" position="18">
+				<ea:section name="hmc.section.product.pictures">
+					<ea:attribute qualifier="picture"/>
+					<ea:attribute qualifier="thumbnail">
+						<ea:editor-parameter>
+        					<ea:name>reloadEditorOnCurrentObjectChange</ea:name>
+        					<ea:value>true</ea:value>
+    					</ea:editor-parameter>
+					</ea:attribute>
+				</ea:section>
+				<ea:section name="hmc.section.product.additionalmedias">
+					<ea:attribute qualifier="data_sheet"/>
+					<ea:attribute qualifier="detail"/>
+					<ea:attribute qualifier="logo"/>
+					<ea:attribute qualifier="normal"/>
+					<ea:attribute qualifier="others"/>
+					<ea:attribute qualifier="thumbnails"/>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.extendedattributes" position="26">
+				<ea:section name="hmc.section.product.ids">
+					<ea:attribute qualifier="ean"/>
+					<ea:attribute qualifier="manufacturerAID"/>
+					<ea:attribute qualifier="manufacturerName"/>
+					<ea:attribute qualifier="deliveryTime"/>
+					<ea:attribute qualifier="contentUnit"/>
+					<ea:attribute qualifier="numberContentUnits"/>
+				</ea:section>
+				<ea:section name="hmc.section.product.remarks">
+					<ea:attribute qualifier="remarks"/>
+				</ea:section>
+				<ea:section name="hmc.section.product.keywords">
+					<ea:attribute qualifier="keywords" description="hmc.text.product.keywords"/>
+				</ea:section>
+			</ea:tab>
+
+			<ea:tab name="hmc.administration">
+				<ea:section name="hmc.section.metadata">
+					<ea:attribute qualifier="pk"/>
+					<ea:attribute qualifier="itemtype"/>
+					<ea:attribute qualifier="creationtime"/>
+					<ea:attribute qualifier="modifiedtime"/>
+					<ea:attribute qualifier="owner"/>
+				</ea:section>
+				<ea:section name="hmc.section.saved.values">
+					<ea:attribute qualifier="savedValues"/>
+				</ea:section>
+				<ea:customSection name="hmc.unbound" spring-bean="unboundSectionRenderer"/>
+				<ea:section name="hmc.section.copies" merge-mode="remove">
+					<ea:attribute qualifier="synchronizedCopies"/>
+					<ea:attribute qualifier="synchronizationSources"/>
+				</ea:section>
+			</ea:tab>
+		</ea:editorArea>
+	</context>
+
+	<context merge-by="type" parent="Product" type="VariantProduct" component="editor-area">
+		<ea:editorArea name="">
+			<ea:tab name="hmc.tab.product.properties">
+                <ea:customSection name="hmc.section.variantattributes" spring-bean="variantAttributesSectionRenderer" position="0"/>
+			</ea:tab>
+		</ea:editorArea>
+	</context>
+
+	<context merge-by="type" type="Product" component="editor-area" >
+		<ea:editorArea name="">
+			<ea:essentials merge-mode="remove">
+				<ea:essentialSection name="hmc.essential" merge-mode="remove">
+					<ea:attribute qualifier="code"/>
+					<ea:attribute qualifier="name"/>
+					<ea:attribute qualifier="catalogVersion" merge-mode="remove"/>
+					<ea:attribute qualifier="approvalStatus"/>
+				</ea:essentialSection>
+			</ea:essentials>
+			<ea:tab name="hmc.tab.product.properties" position="2" merge-mode="remove" >
+				<ea:section name="hmc.section.catalog_and_validity">
+					<ea:attribute qualifier="onlineDate"/>
+					<ea:attribute qualifier="offlineDate"/>
+				</ea:section>
+				<ea:section name="hmc.product.descriptions">
+					<ea:attribute editor="com.hybris.cockpitng.editor.localized(com.hybris.cockpitng.editor.wysiwyg)"
+								  qualifier="description"/>
+					<ea:attribute qualifier="unit"/>
+				</ea:section>
+			</ea:tab>
+			<ea:customTab name="hmc.tab.attribute" spring-bean="classificationTabEditorAreaRenderer" position="6" merge-mode="remove">
+				<ea:section name="hmc.section.product.untypedfeatures">
+					<ea:attribute qualifier="untypedFeatures" description="hmc.text.product.untypedfeatures"/>
+				</ea:section>
+			</ea:customTab>
+			<ea:tab name="hmc.tab.product.categorysystem" position="10" merge-mode="remove">
+				<ea:section name="hmc.section.product.productincategory">
+					<ea:attribute qualifier="supercategories"/>
+					<ea:attribute qualifier="classificationClasses" merge-mode="remove"/>
+				</ea:section>
+				<ea:section name="hmc.section.product.productreferences">
+					<ea:attribute qualifier="productReferences"/>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.prices"
+					position="14" merge-mode="remove">
+				<ea:section name="hmc.section.product.pricesdiscounts">
+					<ea:panel colspan="2" name="panel.europe1Prices" rowspan="2">
+						<ea:attribute qualifier="europe1Prices" description="hmc.text.product.pg"
+									  editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+							<ea:editor-parameter>
+								<ea:name>listConfigContext</ea:name>
+								<ea:value>europe1PricesListView</ea:value>
+							</ea:editor-parameter>
+							<ea:editor-parameter>
+								<ea:name>disableRemoveReference</ea:name>
+								<ea:value>product == null</ea:value>
+							</ea:editor-parameter>
+							<ea:editor-parameter>
+								<ea:name>configurableFlowConfigCtx</ea:name>
+								<ea:value>create-wizard-no-save</ea:value>
+							</ea:editor-parameter>
+						</ea:attribute>
+					</ea:panel>
+					<ea:attribute qualifier="minOrderQuantity"/>
+					<ea:attribute qualifier="maxOrderQuantity"/>
+					<ea:attribute qualifier="priceQuantity"/>
+					<ea:attribute qualifier="Europe1PriceFactory_PPG" description="hmc.text.product.pg"/>
+				</ea:section>
+                <ea:section name="hmc.section.product.discounts">
+					<ea:panel colspan="2" name="panel.europe1Discounts" rowspan="2">
+                        <ea:attribute qualifier="europe1Discounts" editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor">
+							<ea:editor-parameter>
+								<ea:name>listConfigContext</ea:name>
+								<ea:value>europe1DiscountsListView</ea:value>
+							</ea:editor-parameter>
+						</ea:attribute>
+					</ea:panel>
+					<ea:attribute qualifier="Europe1PriceFactory_PDG" description="hmc.text.product.dg"/>
+					<ea:attribute qualifier="Europe1PriceFactory_PTG" description="hmc.text.product.dg"/>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.multimedia" position="18" merge-mode="remove">
+				<ea:section name="hmc.section.product.pictures">
+					<ea:attribute qualifier="picture"/>
+					<ea:attribute qualifier="thumbnail">
+						<ea:editor-parameter>
+        					<ea:name>reloadEditorOnCurrentObjectChange</ea:name>
+        					<ea:value>true</ea:value>
+    					</ea:editor-parameter>
+					</ea:attribute>
+				</ea:section>
+				<ea:section name="hmc.section.product.additionalmedias">
+					<ea:attribute qualifier="data_sheet"/>
+					<ea:attribute qualifier="detail"/>
+					<ea:attribute qualifier="logo"/>
+					<ea:attribute qualifier="normal"/>
+					<ea:attribute qualifier="others"/>
+					<ea:attribute qualifier="thumbnails"/>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.variants" position="22" merge-mode="remove">
+				<ea:section name="hmc.section.product.variants" description="hmc.text.variants">
+					<ea:attribute qualifier="variantType"/>
+					<ea:attribute qualifier="variants" description="hmc.attribute.product.variants.disabled.hint">
+						<ea:editor-parameter>
+							<ea:name>configurableFlowConfigCtx</ea:name>
+							<ea:value>create-wizard-no-save</ea:value>
+						</ea:editor-parameter>
+					</ea:attribute>
+				</ea:section>
+			</ea:tab>
+			<ea:tab name="hmc.tab.product.extendedattributes" position="26" merge-mode="remove">
+				<ea:section name="hmc.section.product.ids">
+					<ea:attribute qualifier="ean"/>
+					<ea:attribute qualifier="manufacturerAID"/>
+					<ea:attribute qualifier="manufacturerName"/>
+					<ea:attribute qualifier="deliveryTime"/>
+					<ea:attribute qualifier="contentUnit"/>
+					<ea:attribute qualifier="numberContentUnits"/>
+				</ea:section>
+				<ea:section name="hmc.section.product.remarks">
+					<ea:attribute qualifier="remarks"/>
+				</ea:section>
+				<ea:section name="hmc.section.product.keywords">
+					<ea:attribute qualifier="keywords" description="hmc.text.product.keywords"/>
+				</ea:section>
+			</ea:tab>
+			
+		<ea:tab name="hmc.administration">
+				<ea:section name="hmc.section.metadata" merge-mode="remove">
+					<ea:attribute qualifier="pk"/>
+					<ea:attribute qualifier="itemtype"/>
+					<ea:attribute qualifier="creationtime"/>
+					<ea:attribute qualifier="modifiedtime"/>
+					<ea:attribute qualifier="owner"/>
+				</ea:section>
+				<ea:section name="hmc.section.saved.values" merge-mode="remove">
+					<ea:attribute qualifier="savedValues"/>
+				</ea:section>
+				<ea:customSection name="hmc.unbound" spring-bean="unboundSectionRenderer" merge-mode="remove"/>
+				<ea:section name="hmc.section.copies" merge-mode="remove">
+					<ea:attribute qualifier="synchronizedCopies"/>
+					<ea:attribute qualifier="synchronizationSources"/>
+				</ea:section>
+				<ea:section name="hmc.variants">
+					<ea:attribute qualifier="variants"/>
+					<ea:attribute qualifier="supercategories"/>
+					<ea:attribute qualifier="code"/>
+				</ea:section> 		
+			</ea:tab>				
+		</ea:editorArea>	
+	</context>
+	
+	
+	 <context merge-by="module" type="Product" component="editor-area">
+        <editorArea:editorArea xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+            <editorArea:tab name="hmc.tab.product.properties">
+                <editorArea:section name="hmc.product.descriptions">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="summary"/>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.tab.product.multimedia">
+                <editorArea:section name="hmc.section.product.additionalmedias">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="galleryImages"/>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.tab.community"  merge-mode="remove">
+                <editorArea:section name="hmc.product.sections.customerreviews">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="reviewCount" readonly="true"/>
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="reviewRating" readonly="true"/>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.tab.product.stock" position="35"  merge-mode="remove">
+                <editorArea:section name="hmc.tab.product.stockfinder"/>
+					<editorArea:section name="hmc.section.warehouse.stocklevels">
+						<editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea"
+													 editor="de.hybris.platform.commerceservices.backoffice.editor.stocklevelfindereditor"
+													 qualifier="stockLevels" label="hmc.text.product.usesearchtogetstocklevels">
+							<editorArea:editor-parameter>
+								<editorArea:name>stockLevelSearchField</editorArea:name>
+								<editorArea:value>product</editorArea:value>
+							</editorArea:editor-parameter>
+						</editorArea:attribute>
+					</editorArea:section>
+            </editorArea:tab>
+        </editorArea:editorArea>
+    </context>	
+
+</config>

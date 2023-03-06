@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<items 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:noNamespaceSchemaLocation="items.xsd">
+
+
+	<collectiontypes>
+		<collectiontype code="freightPriceItemsList" elementtype="BTPOutboundFreightPriceItemRequest" autocreate="true" generate="true"
+						type="list" />
+	</collectiontypes>
+
+	<itemtypes>
+
+		<itemtype code="BTPOutboundFreightPriceRequest" autocreate="true" generate="true">
+			<deployment table="BTPOutboundFreightPrice" typecode="12000"/>
+			<attributes>
+				<attribute qualifier="process_type" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="quoteId" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" unique="true" />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="soldTo" type="java.lang.String">
+					<modifiers read="true" write="true" search="true"/>
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="btpOutboundFreightPriceItems" type="freightPriceItemsList">
+					<modifiers read="true" write="true"/>
+					<persistence type="property" />
+				</attribute>
+
+			</attributes>
+		</itemtype>
+
+		<itemtype code="BTPOutboundFreightPriceItemRequest" autocreate="true" generate="true">
+			<deployment table="BTPOutboundFreightItem" typecode="12001"/>
+			<attributes>
+				<attribute qualifier="product_id" type="java.lang.String">
+					<modifiers read="true" write="true" search="true"  />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="line_item_id" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" unique="true" />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="contract_id" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="freight_term" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="uom" type="java.lang.String">
+					<modifiers read="true" write="true" search="true"  />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="quantity" type="java.lang.Long">
+					<modifiers read="true" write="true" search="true" />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="item_type" type="java.lang.String">
+					<modifiers read="true" write="true" search="true"  />
+					<persistence type="property"/>
+				</attribute>
+				<attribute qualifier="freight" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property"/>
+				</attribute>
+			</attributes>
+		</itemtype>
+		
+		<itemtype code="BTPOutboundContractPriceRequest" autocreate="true" generate="true">
+			<description>Pricing Request Integration Object</description>
+			<deployment table="BTPOutboundContractPrice" typecode="11011"/>
+			<attributes>
+				<attribute qualifier="pricingRequestLineItems" type="PricingRequestLineItems">
+					<modifiers read="true" write="true" search="true" optional="true" unique="true" />
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+
+		<itemtype code="PricingRequestLineItems" autocreate="true" generate="true">
+			<description>Contract Pricing Request Integration Object</description>
+			<deployment table="PricingRequestLineItems" typecode="11012"/>
+			<attributes>
+				<attribute qualifier="soldTo" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="product_id" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="item_type" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="quote_id" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="line_item_id" type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" unique="true"/>
+					<persistence type="property" />
+				</attribute>
+
+			</attributes>
+		</itemtype>
+		
+	</itemtypes>
+</items>

@@ -1,0 +1,21 @@
+## PLEASE, check whether more cleaning is needed in OutboundServicesEssentialData class
+## whenever the content of this impex changes
+
+INSERT_UPDATE IntegrationObject; code[unique = true]
+                               ; OutboundContractPriceRequest
+
+INSERT_UPDATE IntegrationObjectItem; integrationObject(code)[unique = true]  ; code[unique = true]                ; type(code)                       ;root[default = false]
+                                   ; OutboundContractPriceRequest            ; BTPOutboundContractPriceRequest    ; BTPOutboundContractPriceRequest  ;true
+                                   ; OutboundContractPriceRequest            ; PricingRequestLineItems            ; PricingRequestLineItems          ;
+
+
+INSERT_UPDATE IntegrationObjectItemAttribute; integrationObjectItem(integrationObject(code), code)[unique = true] ; attributeName[unique = true]    ; attributeDescriptor(enclosingType(code), qualifier)     ; returnIntegrationObjectItem(integrationObject(code), code) ; unique[default = false]
+                                            ; OutboundContractPriceRequest:BTPOutboundContractPriceRequest        ; pricingRequestLineItems         ; BTPOutboundContractPriceRequest:pricingRequestLineItems ; OutboundContractPriceRequest:PricingRequestLineItems       ; true
+                                            ; OutboundContractPriceRequest:PricingRequestLineItems                ; soldTo                          ; PricingRequestLineItems:soldTo                          ;                                                            ;
+                                            ; OutboundContractPriceRequest:PricingRequestLineItems                ; product_id                      ; PricingRequestLineItems:product_id                      ;                                                            ;
+                                            ; OutboundContractPriceRequest:PricingRequestLineItems                ; item_type                       ; PricingRequestLineItems:item_type                       ;                                                            ;
+                                            ; OutboundContractPriceRequest:PricingRequestLineItems                ; quote_id                        ; PricingRequestLineItems:quote_id                        ;                                                            ;
+                                            ; OutboundContractPriceRequest:PricingRequestLineItems                ; line_item_id                    ; PricingRequestLineItems:line_item_id                    ;                                                            ;true
+
+
+

@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:annotation-config/>
+
+    <!-- Spring Integration -->
+
+    <!-- SystemSetup for the OcaCore -->
+    <bean id="acceleratorCoreSystemSetup" class="com.olympus.oca.commerce.core.setup.CoreSystemSetup"
+          parent="abstractCoreSystemSetup"/>
+
+    <bean id="ocaProductPrepareInterceptor" class="com.olympus.oca.commerce.core.product.interceptors.OcaProductPrepareInterceptor"/>
+    <bean id="ocaProductInterceptorMapping"
+          class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+        <property name="interceptor" ref="ocaProductPrepareInterceptor"/>
+        <property name="typeCode" value="Product"/>
+    </bean>
+
+	<bean id="ocaB2BCustomerInterceptor" class="com.olympus.oca.commerce.core.product.interceptors.OcaB2BCustomerInterceptor"/>
+	<bean id="ocaB2BCustomerInterceptorMapping"
+		  class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="ocaB2BCustomerInterceptor"/>
+		<property name="typeCode" value="B2BCustomer"/>
+	</bean>
+
+	<alias name="defaultOcaB2BDeliveryAddressesLookupStrategy" alias="b2bDeliveryAddressesLookupStrategy"/>
+	<bean name="defaultOcaB2BDeliveryAddressesLookupStrategy"
+		  class="com.olympus.oca.commerce.core.strategies.impl.DefaultOcaB2BDeliveryAddressesLookupStrategy"/>
+
+    <alias name="defaultOcaFindDeliveryCostStrategy" alias="slFindDeliveryCostStrategy"/>
+    <bean id="defaultOcaFindDeliveryCostStrategy"
+          class="com.olympus.oca.commerce.core.strategies.impl.DefaultOcaFindDeliveryCostStrategy">
+        <constructor-arg name="freightCostIntegrationService" ref="freightCostIntegrationService"/>
+        <constructor-arg name="modelService" ref="modelService"/>
+    </bean>
+
+    <!-- Solr field value providers -->
+
+    <bean id="volumeAwareProductPriceValueProvider"
+          class="com.olympus.oca.commerce.core.search.solrfacetsearch.provider.impl.VolumeAwareProductPriceValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="priceService" ref="priceService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="sessionService" ref="sessionService"/>
+        <property name="userService" ref="userService"/>
+        <property name="priceComparator" ref="volumePriceComparator"/>
+        <property name="catalogVersionService" ref="catalogVersionService"/>
+    </bean>
+
+    <bean id="volumePriceComparator" class="com.olympus.oca.commerce.core.comparators.VolumeAwarePriceInformationComparator" scope="singleton"/>
+
+    <bean id="productVolumePricesProvider" class="com.olympus.oca.commerce.core.search.solrfacetsearch.provider.impl.ProductVolumePricesProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="priceService" ref="priceService"/>
+    </bean>
+
+
+    <bean id="usageTypeFacetDisplayNameProvider"
+          class="com.olympus.oca.commerce.core.search.solrfacetsearch.provider.impl.OcaUsageTypeFacetDisplayNameProvider"
+    >
+        <property name="enumerationService" ref="enumerationService"/>
+        <property name="i18nService" ref="i18nService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+
+    <bean id="productSpecialityFacetDisplayNameProvider"
+          class="com.olympus.oca.commerce.core.search.solrfacetsearch.provider.impl.OcaProductSpecialityFacetDisplayNameProvider"
+    >
+        <property name="enumerationService" ref="enumerationService"/>
+        <property name="i18nService" ref="i18nService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="ocaCategorySource" parent="abstractCategorySource">
+        <property name="rootCategory" value="1"/>
+        <!-- '1' is the root icecat category -->
+    </bean>
+    <bean id="abstractCategoryCodeValueProvider" abstract="true"
+          class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.CategoryCodeValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+    <bean id="abstractCategoryNameValueProvider" abstract="true"
+          class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.CategoryNameValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="ocaCategoryNameValueProvider" parent="abstractCategoryNameValueProvider">
+        <property name="categorySource" ref="ocaCategorySource"/>
+    </bean>
+
+    <bean id="image515ValueProvider" parent="abstractImageValueProvider">
+        <property name="mediaFormat" value="515Wx515H"/>
+    </bean>
+    <bean id="image300ValueProvider" parent="abstractImageValueProvider">
+        <property name="mediaFormat" value="300Wx300H"/>
+    </bean>
+    <bean id="image96ValueProvider" parent="abstractImageValueProvider">
+        <property name="mediaFormat" value="96Wx96H"/>
+    </bean>
+    <bean id="image65ValueProvider" parent="abstractImageValueProvider">
+        <property name="mediaFormat" value="65Wx65H"/>
+    </bean>
+    <bean id="image30ValueProvider" parent="abstractImageValueProvider">
+        <property name="mediaFormat" value="30Wx30H"/>
+    </bean>
+
+    <bean id="productUrlValueProvider"
+          class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.ProductUrlValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="urlResolver" ref="productModelUrlResolver"/>
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="i18nService" ref="i18nService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+    </bean>
+
+    <bean id="promotionCodeValueProvider"
+          class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.PromotionCodeValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="promotionsService" ref="promotionsService"/>
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+    </bean>
+
+    <bean id="promotionImageValueProvider"
+          class="de.hybris.platform.commerceservices.search.solrfacetsearch.provider.impl.PrimaryPromotionImageValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="promotionsService" ref="promotionsService"/>
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+    </bean>
+
+    <!--
+        Event listeners are singletons, therefore the dependency for a bean in tenant-scope
+        must be configured with a lookup method.
+    -->
+    <bean id="orderCancelledEventListener"
+          class="com.olympus.oca.commerce.core.event.OrderCancelledEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="orderRefundEventListener"
+          class="com.olympus.oca.commerce.core.event.OrderRefundEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="customerRegistrationEventListener"
+          class="com.olympus.oca.commerce.core.event.RegistrationEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="forgottenPasswordEventListener"
+          class="com.olympus.oca.commerce.core.event.ForgottenPasswordEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="submitOrderEventListener" class="com.olympus.oca.commerce.core.event.SubmitOrderEventListener"
+          parent="abstractAcceleratorSiteEventListener">
+        <property name="businessProcessService" ref="businessProcessService"/>
+        <property name="modelService" ref="modelService"/>
+        <property name="baseStoreService" ref="baseStoreService"/>
+    </bean>
+    <bean id="orderConfirmationEventListener"
+          class="com.olympus.oca.commerce.core.event.OrderConfirmationEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="sendDeliveryMessageEventListener"
+          class="com.olympus.oca.commerce.core.event.SendDeliveryMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="sendReadyForPickupMessageEventListener"
+          class="com.olympus.oca.commerce.core.event.SendReadyForPickupMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="sendOrderPartiallyCanceledMessageEventListener"
+          class="com.olympus.oca.commerce.core.event.SendOrderPartiallyCanceledMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="sendOrderPartiallyRefundedMessageEventListener"
+          class="com.olympus.oca.commerce.core.event.SendOrderPartiallyRefundedMessageEventListener" parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="sendNotPickedUpConsignmentCanceledMessageEventListener"
+          class="com.olympus.oca.commerce.core.event.SendNotPickedUpConsignmentCanceledMessageEventListener"
+          parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+    <bean id="orderCompletedEventListener" class="com.olympus.oca.commerce.core.event.OrderCompletedEventListener"
+          parent="abstractAcceleratorSiteEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <!-- Process resources definition -->
+
+    <bean id="customerRegistrationEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/customerRegistrationEmailProcess.xml"/>
+    </bean>
+    <bean id="forgottenPasswordEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/forgottenPasswordEmailProcess.xml"/>
+    </bean>
+    <bean id="orderConfirmationEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/orderConfirmationEmailProcess.xml"/>
+    </bean>
+    <bean id="sendDeliveryEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendDeliveryEmailProcess.xml"/>
+    </bean>
+    <bean id="sendReadyForPickupEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendReadyForPickupEmailProcess.xml"/>
+    </bean>
+    <bean id="sendOrderCancelledEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendOrderCancelledEmailProcess.xml"/>
+    </bean>
+    <bean id="sendOrderRefundEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendOrderRefundEmailProcess.xml"/>
+    </bean>
+    <bean id="sendOrderPartiallyCanceledEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendOrderPartiallyCanceledEmailProcess.xml"/>
+    </bean>
+    <bean id="sendOrderPartiallyRefundedEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendOrderPartiallyRefundedEmailProcess.xml"/>
+    </bean>
+    <bean id="sendNotPickedUpConsignmentCanceledEmailProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/sendNotPickedUpConsignmentCanceledEmailProcess.xml"/>
+    </bean>
+
+    <!-- Actions -->
+    <bean id="abstractAction" class="de.hybris.platform.processengine.action.AbstractAction"
+          abstract="true">
+        <property name="modelService" ref="modelService"/>
+        <property name="processParameterHelper" ref="processParameterHelper"/>
+    </bean>
+
+    <bean id="sendEmail" class="de.hybris.platform.acceleratorservices.process.email.actions.SendEmailAction"
+          parent="abstractAction">
+        <property name="emailService" ref="emailService"/>
+    </bean>
+
+    <bean id="abstractGenerateEmailAction" class="de.hybris.platform.acceleratorservices.process.email.actions.GenerateEmailAction"
+          parent="abstractAction" abstract="true">
+        <property name="modelService" ref="modelService"/>
+        <property name="cmsEmailPageService" ref="cmsEmailPageService"/>
+        <property name="contextResolutionStrategy" ref="processContextResolutionStrategy"/>
+        <property name="emailGenerationService" ref="emailGenerationService"/>
+    </bean>
+
+    <bean id="generateCustomerRegistrationEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="CustomerRegistrationEmailTemplate"/>
+    </bean>
+
+    <bean id="generateForgottenPasswordEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="ForgottenPasswordEmailTemplate"/>
+    </bean>
+
+    <bean id="generateOrderConfirmationEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="OrderConfirmationEmailTemplate"/>
+    </bean>
+
+    <bean id="generateDeliverySentEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="DeliverySentEmailTemplate"/>
+    </bean>
+
+    <bean id="generateReadyForPickupEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="ReadyForPickupEmailTemplate"/>
+    </bean>
+
+    <bean id="generateOrderCancelledEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="OrderCancelledEmailTemplate"/>
+    </bean>
+
+    <bean id="generateOrderRefundEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="OrderRefundEmailTemplate"/>
+    </bean>
+
+    <bean id="generateOrderPartiallyCanceledEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="OrderPartiallyCanceledEmailTemplate"/>
+    </bean>
+    <bean id="generateOrderPartiallyRefundedEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="OrderPartiallyRefundedEmailTemplate"/>
+    </bean>
+    <bean id="generateNotPickedUpConsignmentCanceledEmail" parent="abstractGenerateEmailAction">
+        <property name="frontendTemplateName" value="NotPickedUpConsignmentCanceledEmailTemplate"/>
+    </bean>
+
+    <bean id="removeSentEmail"
+          class="de.hybris.platform.acceleratorservices.process.email.actions.RemoveSentEmailAction"
+          parent="abstractAction">
+        <property name="modelService" ref="modelService"/>
+    </bean>
+
+    <bean id="markQuoteNotificationAsSent"
+          class="com.olympus.oca.commerce.core.actions.quote.MarkQuoteNotificationAsSentAction"
+          parent="abstractAction" abstract="true">
+        <property name="quoteService" ref="quoteService"/>
+    </bean>
+
+    <!-- Simple Suggestion Service -->
+    <alias alias="simpleSuggestionService" name="defaultSimpleSuggestionService"/>
+    <bean id="defaultSimpleSuggestionService"
+          class="com.olympus.oca.commerce.core.suggestion.impl.DefaultSimpleSuggestionService">
+        <property name="simpleSuggestionDao" ref="simpleSuggestionDao"/>
+    </bean>
+    <alias alias="simpleSuggestionDao" name="defaultSimpleSuggestionDao"/>
+    <bean id="defaultSimpleSuggestionDao"
+          class="com.olympus.oca.commerce.core.suggestion.dao.impl.DefaultSimpleSuggestionDao"
+          parent="abstractItemDao">
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+
+    <!-- Sales quote process actions -->
+
+    <!-- quote-->
+    <bean id="quoteBuyerSubmitEventListener" class="com.olympus.oca.commerce.core.event.QuoteBuyerSubmitEventListener"
+          parent="abstractEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <bean id="quoteSalesRepSubmitEventListener" class="com.olympus.oca.commerce.core.event.QuoteSalesRepSubmitEventListener"
+          parent="abstractEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <bean id="quoteSellerApprovalSubmitEventListener" class="com.olympus.oca.commerce.core.event.QuoteSellerApprovalSubmitEventListener"
+          parent="abstractEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <bean id="quoteBuyerOrderPlacedEventListener" class="com.olympus.oca.commerce.core.event.QuoteBuyerOrderPlacedEventListener"
+          parent="abstractEventListener">
+        <property name="commerceQuoteService" ref="commerceQuoteService"/>
+        <property name="modelService" ref="modelService"/>
+    </bean>
+
+    <bean id="quoteToExpireSoonEventListener" class="com.olympus.oca.commerce.core.event.QuoteToExpireSoonEventListener"
+          parent="abstractEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <bean id="quoteExpiredEventListener" class="com.olympus.oca.commerce.core.event.QuoteExpiredEventListener"
+          parent="abstractEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <bean id="quoteCancelEventListener" class="com.olympus.oca.commerce.core.event.QuoteCancelEventListener"
+          parent="abstractEventListener">
+        <property name="modelService" ref="modelService"/>
+        <property name="businessProcessService" ref="businessProcessService"/>
+    </bean>
+
+    <bean id="quoteBuyerProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/quote/quote-buyer-process.xml"/>
+    </bean>
+
+    <bean id="quoteSalesRepProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/quote/quote-salesrep-process.xml"/>
+    </bean>
+
+
+    <bean id="quoteSellerApprovalProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/quote/quote-seller-approval-process.xml"/>
+    </bean>
+
+    <bean id="quotePostCancellationProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/quote/quote-post-cancellation-process.xml"/>
+    </bean>
+
+    <bean id="quoteToExpireSoonProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/quote/quote-to-expire-soon-email-process.xml"/>
+    </bean>
+
+    <bean id="quoteExpiredProcessDefinitionResource"
+          class="de.hybris.platform.processengine.definition.ProcessDefinitionResource">
+        <property name="resource" value="classpath:/ocacore/processes/quote/quote-expired-email-process.xml"/>
+    </bean>
+
+    <!-- Quotes email notification jobs -->
+    <bean id="quoteToExpireSoonJobPerformable"
+          class="com.olympus.oca.commerce.core.job.QuoteToExpireSoonJobPerformable"
+          parent="abstractJobPerformable">
+        <property name="supportedQuoteStatuses">
+            <set value-type="de.hybris.platform.core.enums.QuoteState">
+                <value>BUYER_OFFER</value>
+            </set>
+        </property>
+        <property name="commerceQuoteDao" ref="commerceQuoteDao"/>
+        <property name="eventService" ref="eventService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
+
+    <bean id="quoteExpiredJobPerformable"
+          class="com.olympus.oca.commerce.core.job.QuoteExpiredJobPerformable"
+          parent="abstractJobPerformable">
+        <property name="supportedQuoteStatuses">
+            <set value-type="de.hybris.platform.core.enums.QuoteState">
+                <value>BUYER_OFFER</value>
+            </set>
+        </property>
+        <property name="commerceQuoteDao" ref="commerceQuoteDao"/>
+        <property name="eventService" ref="eventService"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
+
+    <import resource="/ocacore/processes/quote/quote-buyer-process-spring.xml"/>
+    <import resource="/ocacore/processes/quote/quote-salesrep-process-spring.xml"/>
+    <import resource="/ocacore/processes/quote/quote-seller-approval-process-spring.xml"/>
+
+    <import resource="/ocacore/processes/quote/quote-to-expire-soon-email-process-spring.xml"/>
+    <import resource="/ocacore/processes/quote/quote-expired-email-process-spring.xml"/>
+
+    <import resource="/ocacore/processes/quote/quote-post-cancellation-process-spring.xml"/>
+
+    <!-- Customer cleanup -->
+    <alias name="defaultCustomerCleanupRelatedObjectsAction" alias="customerCleanupRelatedObjectsAction"/>
+    <bean id="defaultCustomerCleanupRelatedObjectsAction"
+          class="com.olympus.oca.commerce.core.retention.impl.DefaultCustomerCleanupRelatedObjectsAction"
+          parent="abstractExtensibleRemoveCleanupAction">
+        <property name="itemCleanupHooks" ref="customerCleanupHooks"/>
+    </bean>
+
+    <!-- Cleanup the customers not owning any order currently and the current date has past deactivation date+retention date. Also removes customers audit records. -->
+    <alias name="defaultCustomerNotOwningOrdersRemoveCleanupAction" alias="customerNotOwningOrdersRemoveCleanupAction"/>
+    <bean id="defaultCustomerNotOwningOrdersRemoveCleanupAction" class="de.hybris.platform.retention.impl.DefaultExtensibleRemoveCleanupAction"
+          parent="abstractExtensibleRemoveCleanupAction">
+        <property name="itemCleanupHooks" ref="customerCleanupHooks"/>
+    </bean>
+
+    <!-- Order cleanup -->
+    <!-- Cleanup the order related objects and then remove order and its audit records. -->
+    <alias name="defaultOrderRemoveCleanupAction" alias="orderRemoveCleanupAction"/>
+    <bean id="defaultOrderRemoveCleanupAction" class="de.hybris.platform.retention.impl.DefaultExtensibleRemoveCleanupAction"
+          parent="abstractExtensibleRemoveCleanupAction">
+        <property name="itemCleanupHooks" ref="orderCleanupHooks"/>
+    </bean>
+
+    <!-- CsTicket Remove action -->
+    <alias name="defaultCSTicketRemoveCleanupAction" alias="csTicketRemoveCleanupAction"/>
+    <bean id="defaultCSTicketRemoveCleanupAction" class="de.hybris.platform.retention.impl.DefaultExtensibleRemoveCleanupAction"
+          parent="abstractExtensibleRemoveCleanupAction">
+        <property name="itemCleanupHooks" ref="csTicketCleanupHooks"/>
+    </bean>
+
+    <!-- CsTicket Stagnation action -->
+    <alias name="defaultCSTicketStagnationAction" alias="csTicketStagnationAction"/>
+    <bean id="defaultCSTicketStagnationAction" class="com.olympus.oca.commerce.core.retention.impl.DefaultCSTicketStagnationAction"
+          parent="abstractExtensibleRemoveCleanupAction">
+        <property name="itemCleanupHooks" ref="csTicketRetentionHooks"/>
+        <property name="ticketBusinessService" ref="ticketBusinessService"/>
+    </bean>
+
+	<alias name="ocaDefaultCartService" alias="cartService"/>
+	<bean id="ocaDefaultCartService"
+	      class="com.olympus.oca.commerce.core.cart.impl.DefaultOcaCartService" parent="defaultCartService">
+		<property name="ocaCartDao" ref="ocaCartDao"/>
+		<property name="b2bUnitService" ref="b2bUnitService"/>
+		<property name="commerceCartCalculationStrategy" ref="commerceCartCalculationStrategy"/>
+	</bean>
+
+	<bean id="ocaB2BCustomerService"
+		  class="com.olympus.oca.commerce.core.b2bCustomer.impl.DefaultOcaB2BCustomerService">
+		<property name="modelService" ref="modelService"/>
+	</bean>
+
+
+	<alias name="ocaDefaultCartDao" alias="ocaCartDao"/>
+	<bean id="ocaDefaultCartDao"
+	      class="com.olympus.oca.commerce.core.cart.DefaultOcaCartDao">
+	      <property name="configurationService" ref="configurationService"/>
+	      <property name="flexibleSearchService" ref="flexibleSearchService"/>
+	</bean>
+	
+	<!-- <bean id="ocacategoryValueProvider" class="com.olympus.oca.commerce.core.search.solrfacetsearch.provider.impl.OcaCategoryValueProvider" parent="abstractPropertyFieldValueProvider">
+		<property name="fieldNameProvider" ref="solrFieldNameProvider" />
+		<property name="categorySource" ref="allCategoriesSource" />
+	</bean> -->
+    <alias name="ocaDefaultCategoryModelUrlResolver" alias="categoryModelUrlResolver"/>
+    <bean id="ocaDefaultCategoryModelUrlResolver"
+          class="com.olympus.oca.commerce.core.category.OcaDefaultCategoryModelUrlResolver">
+    </bean>
+
+    
+    <!-- OEC-206 Changes -->
+    <alias name="defaultPurchasableAndSellableProductValidator" alias="purchasableAndSellableProductValidator"/>
+    <bean id="defaultPurchasableAndSellableProductValidator"
+          class="com.olympus.oca.commerce.core.order.validator.impl.PurchasableAndSellableProductValidator">
+    </bean>
+
+    <util:list id="addToCartValidators"
+               value-type="de.hybris.platform.commerceservices.order.validator.AddToCartValidator">
+        <ref bean="purchasableAndSellableProductValidator"/>
+    </util:list>
+    <!-- End of OEC-206 Changes -->
+
+    <alias name="ocaDefaultOrderService" alias="orderService"/>
+    <bean id="ocaDefaultOrderService"
+          class="com.olympus.oca.commerce.core.order.impl.DefaultOcaOrderService" parent="defaultOrderService">
+        <property name="ocaOrderDao" ref="ocaOrderDao"/>
+        <property name="b2bUnitService" ref="b2bUnitService"/>
+        <property name="configurationService" ref="configurationService"/>
+        <property name="userService" ref="userService"/>
+        <property name="ocaB2BUnitDao" ref="ocaB2BUnitDao"/>
+    </bean>
+
+    <alias name="ocaDefaultOrderDao" alias="ocaOrderDao"/>
+    <bean id="ocaDefaultOrderDao"
+          class="com.olympus.oca.commerce.core.order.impl.DefaultOcaOrderDao">
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+        <property name="pagedFlexibleSearchService" ref="pagedFlexibleSearchService"/>
+        <property name="configurationService" ref="configurationService"/>
+    </bean>
+
+    <alias name="defaultOcaB2BUnitDao" alias="ocaB2BUnitDao"/>
+    <bean id="defaultOcaB2BUnitDao" class="com.olympus.oca.commerce.core.b2bUnit.impl.DefaultOcaB2BUnitDao">
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+    <bean id="ocaCategoryUrlPathProvider" class="com.olympus.oca.commerce.core.search.solrfacetsearch.provider.impl.OcaCategoryUrlPathProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="productAndCategoryHelper" ref="productAndCategoryHelper"/>
+        <property name="commerceCategoryService" ref="commerceCategoryService"/>
+    </bean>
+	
+	<alias name="defaultOcaCalculationService" alias="calculationService"/>
+	<bean id="defaultOcaCalculationService"
+		  class="com.olympus.oca.commerce.core.order.impl.DefaultOcaCalculationService" parent="defaultCalculationService">
+		<constructor-arg name="orderRequiresCalculationStrategy" ref="orderRequiresCalculationStrategy"/>
+		<constructor-arg name="contractPriceIntegrationService" ref="contractPriceIntegrationService"/>
+		<constructor-arg name="modelService" ref="modelService"/>
+		<constructor-arg name="commonI18NService" ref="commonI18NService"/>
+	</bean>
+	
+</beans>

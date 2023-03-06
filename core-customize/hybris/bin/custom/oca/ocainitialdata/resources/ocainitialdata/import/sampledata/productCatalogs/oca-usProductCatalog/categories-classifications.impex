@@ -1,0 +1,120 @@
+$productCatalog=oca-usProductCatalog
+$productCatalogName=OlympusCommerceProductCatalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog:Staged]
+$classCatalogVersion=catalogversion(catalog(id[default='ocaClassification']),version[default='1.0'])[unique=true,default='ocaClassification:1.0']
+$classSystemVersion=systemVersion(catalog(id[default='ocaClassification']),version[default='1.0'])[unique=true]
+$class=classificationClass(ClassificationClass.code,$classCatalogVersion)[unique=true]
+$supercategories=source(code, $classCatalogVersion)[unique=true]
+$categories=target(code, $catalogVersion)[unique=true]
+$attribute=classificationAttribute(code,$classSystemVersion)[unique=true]
+$unit=unit(code,$classSystemVersion)
+$lang=en
+
+# Insert Classifications
+INSERT_UPDATE ClassificationClass;$classCatalogVersion;code[unique=true];name[lang=$lang];allowedPrincipals(uid)[default='customergroup']
+;;GeneralDimensions;General Dimensions
+;;Needle;Needle
+;;Balloon;Balloon
+;;Knives;Knives
+;;Stent;Stent
+;;Shaft;Shaft
+;;Size;Size
+;;LoopWire;Loop Wire
+;;TipType;Tip Type
+;;TotalLength;Total Length
+;;Width;Width
+;;OpeningSize;Opening Size
+;;Material;Material
+;;TipLength;Tip Length
+
+
+
+# Insert Classification Attributes
+INSERT_UPDATE ClassificationAttribute;$classSystemVersion;code[unique=true]
+;;TotalLength,101
+;;WorkingLength,102
+;;NeedleLength,103
+;;TipLength,104
+;;KnivesLength,105
+;;StentLength,106
+;;BalloonLength,107
+;;Width,108
+;;TipWidth,109
+;;NeedleWidth,110
+;;BodyType,111
+;;ShaftType,112
+;;TipType,113
+;;Size,114
+;;OpeningSize,115
+;;ChannelSize,116
+;;Diameter,117
+;;LoopDiameter,118
+;;WireDiameter,119
+;;Material,120
+;;AreaCompatibility,121
+;;CuttingWire,122
+;;Pressure,123
+
+
+
+
+# Links ClassificationClasses to Categories
+INSERT_UPDATE CategoryCategoryRelation;$categories;$supercategories
+
+;Handpieces;GeneralDimensions
+;ERCP;GeneralDimensions
+;Sphincteroplasty;Balloon
+;BiliaryDilationBalloons;Balloon 
+;EUS/EBUS;GeneralDimensions
+;Needle&Knives ;Knives
+;EBUS-TBNANeedles;Needle
+;StoneManagement&Lithotripsy;GeneralDimensions
+;BalloonDilators;Balloon
+;StoneRetrievalBaskets;TipType
+;Guidewires;Shaft
+;Guidewires;TipType
+;Guidewires;TipLength
+;StoneRetrievalBaskets;Width
+;Lithotriptors;Width
+;PlasticStents;TotalLength
+;GraspingForceps;OpeningSize
+;BiopsyForceps;OpeningSize
+;StoneExtractionBalloons;Balloon
+;Hemostasis;GeneralDimensions
+;InjectionNeedles;Needle
+;LuminalPatency;GeneralDimensions
+;LuminalStenting;Stent
+;BiopsyForceps;GeneralDimensions
+;ForeignBodyRetrieval;GeneralDimensions
+;TissueBiopsy;GeneralDimensions
+;PolypectomySnares;LoopWire
+
+ 
+INSERT_UPDATE ClassAttributeAssignment;$class    ;$attribute         ;position;$unit;attributeType(code[default=string]);multiValued[default=false];range[default=false];localized[default=true]
+                                     ;GeneralDimensions;WorkingLength,102;1;34;number;
+;GeneralDimensions;Diameter,117;2;24;number;
+;GeneralDimensions;AreaCompatibility,121;3;;
+;GeneralDimensions;ChannelSize,116;4;24;number;
+;Needle;NeedleLength,103;1;;number;
+;Needle;NeedleWidth,110;2;44;number;
+;Knives;KnivesLength,105;1;;number;
+;Knives;ChannelSize,116;3;24;number;
+;Stent;StentLength,106;1;;number;
+;Shaft;ShaftType,112;1;;
+;Balloon;BalloonLength,107;1;;number;
+;Balloon;TipWidth,109;2;;number;
+;Balloon;CuttingWire,122;4;;
+;Balloon;Pressure,123;5;;number;
+;Size;Size,114;1;;
+;LoopWire;LoopDiameter,118;1;24;number;
+;LoopWire;WireDiameter,119;2;24;number;
+;TipType;TipType,113;1;;
+;TipLength;TipLength,104;1;;number;
+;TotalLength;TotalLength,101;1;24;number;
+;Width;Width,108;1;24;number;
+;OpeningSize;OpeningSize,115;1;24;number;
+;Material;Material,120;1;;
+
+
+
+

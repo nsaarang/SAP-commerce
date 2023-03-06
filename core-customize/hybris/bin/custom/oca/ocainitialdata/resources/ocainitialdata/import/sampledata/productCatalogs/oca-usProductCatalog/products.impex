@@ -1,0 +1,323 @@
+#products
+$productCatalog = oca-usProductCatalog
+$productCatalogName = Olympus Commerce Product Catalog
+$catalogVersion = catalogversion(catalog(id[default=$productCatalog]), version[default='Staged'])[unique=true, default=$productCatalog:Staged]
+$supercategories = supercategories(code, $catalogVersion)
+$baseProduct = baseProduct(code, $catalogVersion)
+$approved = approvalstatus(code)[default='approved']
+$lang = en
+
+
+
+# Insert Variant Category
+INSERT_UPDATE VariantCategory      ; code[unique=true] ;name     ;$supercategories;$catalogVersion ; allowedPrincipals(uid)[default='customergroup']
+                                   ; Dimension         ;Dimension;                ;
+
+
+
+INSERT_UPDATE VariantValueCategory ;code[unique=true];name            ;$supercategories ;sequence ; $catalogVersion ; allowedPrincipals(uid)[default='customergroup']
+                                   ;DimensionValues  ;Dimension Values;Dimension        ;1
+
+
+
+
+# Insert Products
+INSERT_UPDATE Product ; code[unique=true]             ;$supercategories          ;name[lang=$lang]                       ; variantType(code)[default='GenericVariantProduct']     ; unit(code)[default=pieces] ; $catalogVersion;$approved
+                      ;OCA_BP_00001;1000,Dimension;"Adson Thumb Forcep";
+                      ;OCA_BP_00002;1003,Dimension;"Single-Ended Elevator";
+                      ;OCA_BP_00003;1003,Dimension;"Tongue blade";
+                      ;OCA_BP_00004;1001,Dimension;"Rhinoplasty Scissors";
+                      ;OCA_BP_00005;1005,Dimension;"Miniature Laryngeal Cutting Forcep";
+                      ;OCA_BP_00006;1003,Dimension;"Micro Ear Knife ";
+                      ;OCA_BP_00007;Dimension;"Mouth gag, acc. to Davis-Boyle";
+                      ;OCA_BP_00008;Dimension;"Mouth gag, acc. to McIvor";
+                      ;OCA_BP_00009;1007,Dimension;"SMART THERMAL HANDLE";
+                      ;OCA_BP_00010;1009,Dimension;"Measuring Trial";
+                      ;OCA_BP_00011;1010,Dimension;"Suction irrigation Sheath";
+                      ;OCA_BP_00012;1012,Dimension;"Round bowl";
+                      ;OCA_BP_00013;1014,Dimension;"Spare adapter";
+                      ;OCA_BP_00014;1020,Dimension;"Superspot Head Light";
+                      ;OCA_BP_00015;1021,Dimension;"Teeth Protectors";
+                      ;OCA_BP_00016;1013,Dimension;"Sterilization Container";
+                      ;OCA_BP_00017;1016,Dimension;"Sterilization Trays";
+                      ;OCA_BP_00018;1017,Dimension;"PLASTIC CUTTING SCISSORS";
+                      ;OCA_BP_00019;1000,Dimension;"Weil-Blakesley Nasal Forcep";
+                      ;OCA_BP_00020;1003,Dimension;"Towel Forcep";
+                      ;OCA_BP_00021;1003,Dimension;"Suction tube, acc. to House";
+                      ;OCA_BP_00022;1000,Dimension;"Ries Suction Elevator";
+                      ;OCA_BP_00023;1005,Dimension;"Injection cannula";
+                      ;OCA_BP_00024;1003,Dimension;"Narrow separator";
+                      ;OCA_BP_00025;1003,Dimension;"Laryngeal mirror";
+                      ;OCA_BP_00026;1000,Dimension;"Strabismus Scissors";
+                      ;OCA_BP_00027;1000,Dimension;"Hajek-Kofler Sphenoid Punche Forcep";
+                      ;OCA_BP_00028;1000,Dimension;"JOSEPHCOTTLE HOOK";
+                      ;OCA_BP_00029;1012,Dimension;"Medicine cup";
+                      ;OCA_BP_00030;1022,Dimension;"Laryngo-pharyngoscope “FK-WO TORS”";
+                      ;OCA_BP_00031;1000,Dimension;"Osteotome";
+                      ;OCA_BP_00032;1000,Dimension;"Wullstein Needle";
+                      ;OCA_BP_00033;1005,Dimension;"Single-use Laryngeal Suction Tube";
+
+
+
+#Updating product information
+INSERT_UPDATE GenericVariantProduct ; code[unique=true] ;$baseProduct                          ;$catalogVersion             ;name                                                                         ;description                               ;$supercategories[default=DimensionValues] ;usageType(code) ;$approved
+                                    ;WT425212           ;OCA_BP_00001                          ;                            ;"12 cm total length,.5 mm tip width, size 120"                               ;"WT425212 ADSON TISS FCPS, 1X2 TEETH,OL1" ;                                            ;REUSABLE
+                                    ;WT425712           ;OCA_BP_00001                          ;                            ;"12 cm total length,.7 mm tip width, with tungsten carbide inserts, size 125";"WT425712 ADSON TISSUE FRCP 1X2TEETH 12.5";                                            ;REUSABLE
+                                    ;WT425112;OCA_BP_00001;;"delicate,2 cm,.2 mm tip, size 120";"WT425112 ADSON DELIC TISS FCPS 120MM";;REUSABLE
+                                    ;130031;OCA_BP_00002;;"Incising knife elevator, round, knurled handle, shaft angled0°, blade tip angled 40°, 165 mm overall length";"130031 AUSTIN INCISING KNIFE ELEVATOR";;REUSABLE
+                                    ;130032;OCA_BP_00002;;"Duckbill knife elevator, round, knurled handle, straight shaft, blunt tip, angled up,
+165 mm overall length";"130032 AUSTIN DUCKBILL KNIFE ELEVATOR";;REUSABLE
+                                    ;130033;OCA_BP_00002;;"Right angle elevator, round, knurled handle, straight shaft, tip angled up, 165 mm overall length";"130033 AUSTIN RT/ANG ELEVATOR";;REUSABLE
+                                    ;130096;OCA_BP_00002;;"Footplate elevator, round, knurled handle, shaft angled0°, blade tip angled up, 165 mm overall length";"130096 AUSTIN FOOTPLATE ELEVATOR";;REUSABLE
+                                    ;130165;OCA_BP_00002;;"Elevator, small, round, knurled handle, straight shaft, blade tip angled 10°, 165 mm overall length";"130165 ANTOLI-CANDELA ANG ELEVATOR BLAD";;REUSABLE
+                                    ;130166;OCA_BP_00002;;"Elevator, right, round, knurled handle, shaft angled 20°, straight tip, 165 mm overall length";"130166 ANTOLI-CANDELA RIGHT ELEVATOR";;REUSABLE
+                                    ;130205;OCA_BP_00002;;"Oval window elevator, round, knurled handle, shaft angled 20°, curved blade tip, 154 mm overall length, ebony finish";"130205 SCHUKNECHT OVAL WINDOW ELEVATOR";;REUSABLE
+                                    ;130213;OCA_BP_00002;;"Modified Hough elevator, round, knurled handle, shaft angled 20°, 154 mm overall length, ebony finish, left tip";"130213 SCHUKNECHT MOD HOUGH ELEVATOR RT";;REUSABLE
+                                    ;130214;OCA_BP_00002;;"Modified Hough elevator,round, knurled handle,shaft angled 20°,154 mm overall length,ebony finish, right tip";"130214 SCHUKNECHT MODIFIED HOUGH ELEVAT";;REUSABLE
+                                    ;130262;OCA_BP_00002;;"Duckbill elevator, round, knurled handle, straight shaft, blunt blade tip, 140 mm overall length ebony finish, small";"130262 GUILFORD DUCKBILL ELEVATOR, SM";;REUSABLE
+                                    ;130263;OCA_BP_00002;;"Duckbill elevator, round, knurled handle, straight shaft, blunt blade tip, 140 mm overall length, ebony finish, large";"130263 GUILFORD DUCKBILL ELEVATOR, LG";;REUSABLE
+                                    ;130567;OCA_BP_00002;;"Stapes elevator, round, knurled handle, straight shaft, blade tip angled5°, vapor blast finish";"130567 HOUSE TYPE STAPES ELEVATOR";;REUSABLE
+                                    ;WT645013;OCA_BP_00003;;'Retractor blade, “FK-WO TORS”, for tongue retraction, curved';'Retractor blade "FK-WO TORS", for tongue';;REUSABLE
+                                    ;WT645016;OCA_BP_00003;;'Retractor blade, “FK-WO TORS”,  for tongue retraction, curved, cut-out right';'Retractor blade "FK-WO TORS', for tongue";;REUSABLE
+                                    ;WT645017;OCA_BP_00003;;'Retractor blade, “FK-WO TORS”, for tongue retraction, curved, cut-out left';'Retractor blade "FK-WO TORS", for tongue';;REUSABLE
+                                    ;WT000879;OCA_BP_00004;;"straight, size00 mm";"WTNT277510 NT-RHINOPLASTY SCISSORS, 10";;REUSABLE
+                                    ;WT000880;OCA_BP_00004;;"curved up, size00 mm";"WTNT277610 NT-RHINOPLASTY SCISSORS, 10";;REUSABLE
+                                    ;WT000881;OCA_BP_00004;;"acc. to Walter, angled, size00 mm";"WTNT438410 NT-WALTER SCISS, ANGLED, 10";;REUSABLE
+                                    ;WT000882;OCA_BP_00004;;"acc. to Kilner, curved up, size 140 mm";"WTNT438714 NT-KILNER PLASTIC SURG SCS CV";;REUSABLE
+                                    ;WT632060;OCA_BP_00005;;"cupped jaws, miniature, straight, size x 230 mm";"WT632060 MINIAT.FCPS,ROUND CUPPED JAWS";;REUSABLE
+                                    ;WT632061;OCA_BP_00005;;"cupped jaws, miniature, curved up, size x 230 mm";"WT632061 MINIAT.FCPS,ROUND CPD JAWS 1MM";;REUSABLE
+                                    ;WT632062;OCA_BP_00005;;"cupped jaws, miniature, curved right, size x 230 mm";"WT632062 MINIAT.FCPS,ROUND CPD. JAWS1MM";;REUSABLE
+                                    ;WT632063;OCA_BP_00005;;"cupped jaws, miniature, curved left, size x 230 mm";"WT632063 MINIAT.FCPS,RND CPD. JAWS 1MM";;REUSABLE
+                                    ;WT632064;OCA_BP_00005;;"cupped jaws, miniature, curved up to right, size x 230 mm";"WT632064 MINIAT.FCPS,ROUND CPD. JAWS 1M";;REUSABLE
+                                    ;WT632065;OCA_BP_00005;;"cupped jaws, miniature, curved up to left, size x 230 mm";"WT632065 MINIAT.FCPS,ROUND CPD. JAWS 1M";;REUSABLE
+                                    ;130561;OCA_BP_00006;;"Sickle knife, no.,round, knurled handle,straight shaft,straight blade tip,vapor blast finish";"130561 HOUSE TYPE SICKLE KNIFE";;REUSABLE
+                                    ;130562;OCA_BP_00006;;"Lancet knife, no. 2,round, knurled handle,straight shaft,blade tip angled 40°,vapor blast finish";"130562 HOUSE TYPE LANCET KNIFE";;REUSABLE
+                                    ;130045;OCA_BP_00006;;"ncudostapedial knife,blade tip angled 20°, 168 mm overall length";"130045 AUSTIN INCUDOSTAPEDIAL KNIFE";;REUSABLE
+                                    ;130047;OCA_BP_00006;;"Small sickle knife, straight shaft,curved blade,165 mm overall length";"130047 AUSTIN SM SICKLE KNIFE";;REUSABLE
+                                    ;130103;OCA_BP_00006;;"Stapes knife, blade tip angled 50°, 152 mm overall length, ebony finish";"130103 HOUGH STAPES KNIFE";;REUSABLE
+                                    ;130163;OCA_BP_00006;;"Curved knife, sharp blade, 165 mm overall length";"130163 ANTOLI-CANDELA CURVED KNIFE";;REUSABLE
+                                    ;130211;OCA_BP_00006;;"Roller knife,shaft angled 20°,154 mm overall length";"130211 SCHUKNECHT ROLLER KNIFE TRANSVERS";;REUSABLE
+                                    ;130212;OCA_BP_00006;;"Roller knife, shaft angled 20°,154 mm overall length";"130212 SCHUKNECHT ROLLER KNIFE SAGITT AL";;REUSABLE
+                                    ;130248;OCA_BP_00006;;"Mucous membrane knife,round, knurled handle,straight shaft,blade tip angled 25°,140 mm overall length,ebony finish";"130248 GUILFORD CUP 25DEG MUC MEMB KNIFE";;REUSABLE
+                                    ;130249;OCA_BP_00006;;"Mucous membrane knife,round, knurled handle,straight shaft,blade tip angled 25°,140 mm overall length,ebony finish";"130249 GUILFORD ST 25 DEG MUC MEMB KNIFE";;REUSABLE
+                                    ;130252;OCA_BP_00006;;"Incudostapedial joint knife,round, knurled handle,straight shaft,blade tip angled 30°,140 mm overall length,ebony finish";"130252 GUILFORD INCUDOSTAPEDIAL JOINT KN";;REUSABLE
+                                    ;130351;OCA_BP_00006;;"Flap knife,round, knurled handle,straight shaft,straight blade tip,152 mm overall length,ebony finish";"130351 RONIS FLAP KNIFE";;REUSABLE
+                                    ;130352;OCA_BP_00006;;"Periosteal knife,round, knurled handle,straight shaft,blade tip angled 45°,152 mm overall length,ebony finish";"130352 RONIS PERIOSTEAL KNIFE";;REUSABLE
+                                    ;130381;OCA_BP_00006;;"Angular knife,round, knurled handle,straight shaft,blade tip angled 45°,174 mm overall length,ebony finish";"130381 JORDAN ANGULAR KNIFE";;REUSABLE
+                                    ;130382;OCA_BP_00006;;"Oval knife,round, knurled handle,straight shaft,blade tip angled 50°,174 mm overall length,ebony finish";"130382 JORDAN OVAL KNIFE";;REUSABLE
+                                    ;130393;OCA_BP_00006;;"Capsule Knife";"130393 JORDAN CAPSULE KNIFE";;REUSABLE
+                                    ;130401;OCA_BP_00006;;"Knife,round, knurled handle,straight shaft,blade tip angled 45°,ebony finish";"130401 GOLDMAN 45 DEGREE ANGLE KNIFE";;REUSABLE
+                                    ;130569;OCA_BP_00006;;"Joint knife,round, knurled handle,straight shaft,blade tip angled 65°,vapor blast finish";"130569 HOUSE TYPE JOINT KNIFE";;REUSABLE
+                                    ;WT526000;OCA_BP_00007;;"Mouth gag, acc. to Davis-Boyle, opening left, without blade";"WT526000 DAVIS-BOYLE MOUTH GAG LEFT FRAM";;REUSABLE
+                                    ;WT526010;OCA_BP_00007;;"Bite liner, silicone, for mouth gag, blue, exchangeable, in pair";"WT526010 SILIKON INTERLINING,RMVBLE, PA";;REUSABLE
+                                    ;WT526200;OCA_BP_00007;;"Mouth gag, acc. to Davis-Boyle, opening right, without blade";"WT526200 DAVISBOYLE MOUTH GAG FRAME-ONLY";;REUSABLE
+                                    ;WT526300;OCA_BP_00007;;"Mouth gag, acc. to Davis-Boyle, frame only, for children, left";"WT526300 DAVIS-BOYLE MOUTH GAG F/ CHILD";;REUSABLE
+                                    ;WT525000;OCA_BP_00008;;"Mouth gag, acc. to McIvor, frame only";"WT525000 MC IVOR MOUTH GAG, FRAME ONLY";;REUSABLE
+                                    ;70131012;OCA_BP_00009;;"SMart thermal handle, with AA battery";"70131012 SMART THERMAL HANDLE";;DISPOSABLE
+                                    ;70135801;OCA_BP_00010;;"Micron titanium adjustable sizing block";"70135801 UNIVERSAL CUTTING BLOCK";;REUSABLE
+                                    ;230857;OCA_BP_00011;;"4 mm, 0 DEG MODEL II.";"230857 SUCTION IRRIG SHEATH 4MM 0 DEG II";;REUSABLE
+                                    ;WT997001;OCA_BP_00012;;"stainless steel, size 0.75 / 7.5 x50";"WT997001 SOLUTION BOWL 150X74MM, 0.75L";;REUSABLE
+                                    ;WT997030;OCA_BP_00012;;"graduated, stainless steel various volumes (l), heights (cm) and diameters (mm) Round bowl, stainless steel, size 0.03 / 2.5 x 50";"WT997030 SOLUTION BOWL METALL, 30 CCM";;REUSABLE
+                                    ;WT997150;OCA_BP_00012;;"stainless steel, size 0.2 / 5.5 x 90";"WT997150 SOLUTION BOWL METALL, 150CM";;REUSABLE
+                                    ;WT640003;OCA_BP_00013;;"FK-WO TORS to chest support";"Spare adapter, FK-WO TORS to chest suppo";;REUSABLE
+                                    ;WT996050;OCA_BP_00015;;"Plastic, 2mm blade width";"Teeth Protector, Plastic";;DISPOSABLE
+                                    ;WT952305;OCA_BP_00014;;"Head light “superspot”, with light-guide cable, adapter for Olympus light sources";"WT952305 SUPER SPOT HEAD LAMP W/ ADPTR";;REUSABLE
+                                    ;131408;OCA_BP_00016;;"Large Finger Mat for31414";"131408 FULL SIZE FINGER MAT";;REUSABLE
+                                    ;131414;OCA_BP_00016;;"Sterilization Container, Large, holds any combinationof 4 instrument modules (131403 through31406),can also be used with large instrument modules(131417 through131423), lid notincluded, use withlid31415 or131416";"131414 LGE STERILIZATION CONTNR W/O LID";;REUSABLE
+                                    ;131415;OCA_BP_00016;;"Sterilization Container Lid, large, use with31414";"131415 LID FOR LARGE STERILIZATION CONTR";;REUSABLE
+                                    ;131416;OCA_BP_00016;;"Sterilization Container Lid, large, (Extra Deep), usewith3-414";"131416 X-LGE LID FOR LGE STER CONTAINER";;REUSABLE
+                                    ;230569;OCA_BP_00017;;"Endoscopy sterilization case, No. 3, for sinuscopes and light-guide cable Outer dimensions: 530 x 35 x 310 mm ";"230569 ENDOSCOPY STERILE TRAY";;REUSABLE
+                                    ;230570;OCA_BP_00017;;"Instrument sterilization case, No., for sinus surgery Outer dimensions: 530 x 35 x 310 mm ";"230570 INSTR STER TRAY FOR SINUS SURGERY";;REUSABLE
+                                    ;230571;OCA_BP_00017;;"Forceps sterilization case, No. 2,for endoscopic sinus surgery Outer dimensions: 530 x 35 x 310 mm";"230571 FORCS STER TRAY -ENDO SINUS SURG";;REUSABLE
+                                    ;230096;OCA_BP_00018;;"Scissors, Dissecting, Sharp Delicate, Blunt,05mm";"230096 PLASTIC CUTTING SCISSORS";;REUSABLE
+                                    ;WT230731;OCA_BP_00019;;"through-cutting, upcurved 45, size 4.8 mm";"WT230731 WEIL BLAKESLEY TC FRCP 4.8MM";;REUSABLE
+                                    ;WT336726;OCA_BP_00019;;"through-cutting, straight, S, size 110";"WT336726 Nasal forceps, acc. to Weil-Bl";;REUSABLE
+                                    ;WT336727;OCA_BP_00019;;"through-cutting, 45 curved, S, size 110";"WT336727 Nasal forceps, acc. to Weil-Bl";;REUSABLE
+                                    ;WT336728;OCA_BP_00019;;"through-cutting, straight, M, size 110";"WT336728 Nasal forceps, acc. to Weil-Bl";;REUSABLE
+                                    ;WT336729;OCA_BP_00019;;"through-cutting, 45 curved, M, size 110";"WT336729 Nasal forceps, acc. to Weil-Bl";;REUSABLE
+                                    ;WT336730;OCA_BP_00019;;"through-cutting, straight, L, size 110";"WT336730 Nasal forceps, acc. to Weil-Bl";;REUSABLE
+                                    ;WT336731;OCA_BP_00019;;"through-cutting, 45 curved, L, size 110";"WT336731 Nasal forceps, acc. to Weil-Bl";;REUSABLE
+                                    ;WT149602;OCA_BP_00020;;"with Luer-Lock, long curved, size 2.5 x45 mm";"WT149602 EICKEN ANTRM CAN LNG CV15cm,2.";;REUSABLE
+                                    ;WT149603;OCA_BP_00020;;"with Luer-Lock, long curved, size 3  x45 mm";"WT149603 EICKEN ANTRM CANNULA LG CV15cm3";;REUSABLE
+                                    ;WT149604;OCA_BP_00020;;"with Luer-Lock, long curved, size 4  x45 mm";"WT149604 EICKEN ANTRM CAN LNG CV 15cm,4";;REUSABLE
+                                    ;WT149612;OCA_BP_00020;;"with Luer-Lock, short curved, size 2.5 x45 mm";"WT149612 EICKEN ANTRM CAN SHRT CV15cm,2";;REUSABLE
+                                    ;WT149613;OCA_BP_00020;;"with Luer-Lock, short curved, size 3 x45 mm";"WT149613 EICKEN ANTRM CANNULA SH CV15cm3";;REUSABLE
+                                    ;WT149614;OCA_BP_00020;;"with Luer-Lock, short curved, size 4 x45 mm";"WT149614 EICKEN ANTRM CANNULA SH CV15cm4";;REUSABLE
+                                    ;WT149702;OCA_BP_00020;;"with Luer-Lock, long curved, malleable, size 2.5 x45 mm";"WT149702 EICKEN CANN MBL,O.D 2.5MM LG 1";;REUSABLE
+                                    ;WT149703;OCA_BP_00020;;"with Luer-Lock, long curved, malleable, size 3 x45 mm";"WT149703 EICKEN CANN MAL., O.D 3MM LG 1";;REUSABLE
+                                    ;WT149704;OCA_BP_00020;;"with Luer-Lock, long curved, malleable, size 4 x45 mm";"WT149704 EICKEN ANTRM CANN MALBL LG 4MM";;REUSABLE
+                                    ;WT266106;OCA_BP_00021;;"7 cm working length,0 cm total, various diameters  Suction tube, acc. to House, with Luer-lock, curved, size 0.6 x 7";"WT266106 HOUSE SUCTION CANNULA LUER L .6";;REUSABLE
+                                    ;WT266115;OCA_BP_00021;;"7 cm working length,0 cm total, various diameters   Suction tube, acc. to House, with Luer-lock, curved, size.5 x 70";"WT266115 HOUSE SUCTION CANNULA ANGL. LUE";;REUSABLE
+                                    ;WT266125;OCA_BP_00021;;"Suction tube, acc. to House, with Luer-lock,
+curved, size 2.5 x 70";"WT266125 HOUSE SUCTION CANNULA ANGL. LUE";;REUSABLE
+                                    ;WT000883;OCA_BP_00022;;"size 3.0 x 210 mm";"WT70231050 RIES SUCTION ELEVATOR";;REUSABLE
+                                    ;WT632130;OCA_BP_00023;;"with Luer-lock, bayonet shaped, size 230 mm";"WT632130 LARYNGEAL INJ.NEEDLE LU-LOCK 23";;REUSABLE
+                                    ;WT632131;OCA_BP_00023;;"with Luer-lock, curved, size 230 mm";"WT632131 INJECTION NDLE, LU- LOCK,CRV 2";;REUSABLE
+                                    ;130564;OCA_BP_00024;;"Narrow separator, flat handle, bayonet shaft, blunt tip, vapor blast finish";"130564 HOUSE-TYPE NARROW BAYONET SEPAR";;REUSABLE
+                                    ;WT153902;OCA_BP_00025;;"with handle, size 4";"WT153902 LARYNGEAL MIRROR W.SOL. HANDLE";;REUSABLE
+                                    ;WT153903;OCA_BP_00025;;"with handle, size 6";"WT153903 LARYNGEAL MIRROR W.SOL. HANDLE";;REUSABLE
+                                    ;WT153905;OCA_BP_00025;;"with handle, size 20";"WT153905 LARYNGEAL MIRROR W.SOL. HANDLE";;REUSABLE
+                                    ;WT153906;OCA_BP_00025;;"stainless steel, autoclavable, with fixed handle,9 cm total length,  size 22";"WT153906 LARYNGEAL MIRR W.SOL HNDL F6 22";;REUSABLE
+                                    ;WT153907;OCA_BP_00025;;"with handle, size 24";"WT153907 PHARYNGL MIRROR OCTA HDL F7";;REUSABLE
+                                    ;WT153908;OCA_BP_00025;;"with handle, size 26";"WT153908 LARYNGEAL MIRROR W.SOL. HANDLE";;REUSABLE
+                                    ;WT277312;OCA_BP_00026;;"Strabismus scissors, blunt/blunt,  curved up, size 115 mm";"WT277312 Strabismus scissors, blunt/blu";;REUSABLE
+                                    ;WT512301;OCA_BP_00027;;"upcutting forward, size 4.0 x40 mm";"WT512301 HAJEK-KOFLER PNCH,WL14CM 45ºU";;REUSABLE
+                                    ;WT512302;OCA_BP_00027;;"upcutting forward, size 2.0 x40 mm";"WT512302 HAJEK-KOFLER PNCH,WL14CM 45ºU";;REUSABLE
+                                    ;WT416502;OCA_BP_00028;;"2 prongs, sharp, size 2.0 x60 mm";"WT416502 JOSEPHCOTTLE HOOK 2 SHRP PRNG,";;REUSABLE
+                                    ;WT416505;OCA_BP_00028;;"2 prongs, sharp, size 5.0 x60 mm";"WT416505 JOSEPHCOTTLE HOOK 2 SHRP PRNG,";;REUSABLE
+                                    ;WT416510;OCA_BP_00028;;"2 prongs, sharp, size0 x60 mm";"WT416510 JOSEPH DBL HOOK/PLASTIC SURGERY";;REUSABLE
+                                    ;WT997000;OCA_BP_00029;;"stainless steel,  50 mm height, Medicine cup, stainless steel,  size 50";"WT997000 Medicine cup, stainless steel,";;REUSABLE
+                                    ;WT000850;OCA_BP_00031;;"micro, size 2.0 x80 mm";"WTNT408502 NT-MICRO OSTEOTOME, 2 MM";;REUSABLE
+                                    ;WT000851;OCA_BP_00031;;"micro, size 3.0 x80 mm";"WTNT408503 NT-MICRO OSTEOTOME, 3 MM";;REUSABLE
+                                    ;WT000852;OCA_BP_00031;;"micro, size0 x80 mm";"WTNT408510 NT-NASAL OSTEOTOME, 10 MM";;REUSABLE
+                                    ;WT000854;OCA_BP_00031;;"micro, size 14 x80 mm";"WTNT408514 NT-NASAL OSTEOTOME, 14 MM";;REUSABLE
+                                    ;WT000855;OCA_BP_00031;;"micro, size 2.5 x80 mm";"WTNT408525 NT-MICRO OSTEOTOME, 2,5 MM";;REUSABLE
+                                    ;WT000860;OCA_BP_00031;;"micro, with guard, size 2.2 x80 mm";"WTNT408600 NT-MICRO OSTEOTOME W/GUARD";;REUSABLE
+                                    ;WT254000;OCA_BP_00032;;"sharp, straight, 165 mm total length";"WT254000 WULLSTEIN NEEDLE STR, SHARP 16";;REUSABLE
+                                    ;WT254100;OCA_BP_00032;;"blunt, straight, 165 mm total length";"WT254100 WULLSTEIN NEEDLE STRAIGHT, BLU";;REUSABLE
+                                    ;WT254300;OCA_BP_00032;;"blunt, slightly curved, 165 mm total length";"WT254300 WULLSTEIN NEEDLE SLIGHT CURVED";;REUSABLE
+                                    ;WT254600;OCA_BP_00032;;"sharp, very slightly curved, 165 mm total length";"WT254600 WULLSTEIN NEEDLE VERY SLIGHT CU";;REUSABLE
+                                    ;WT254700;OCA_BP_00032;;"Blue";"WT254700 Needle, acc. to Wullstein, blu";;REUSABLE
+                                    ;WT632026;OCA_BP_00033;;"with cut-off, size 2.0 x 250";"WT632026 LARYNGEAL SUCTION TUBE 2MMX25CM";;DISPOSABLE
+                                    ;WT632027;OCA_BP_00033;;"with cut-off, size 2.5 x 250";"WT632027 LARYNGEAL SUCTN TB 2.5MMX25CM,";;DISPOSABLE
+                                    ;WT632028;OCA_BP_00033;;"with cut-off, size 3.0 x 250";"WT632028 LARYNGEAL SUCTION TUBE 3MMX25C";;DISPOSABLE
+
+
+$productCatalog=oca-usProductCatalog
+$productCatalogName=Olympus Commerce Product Catalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog:Staged]
+$supercategories=source(code, $catalogVersion)[unique=true]
+$categories=target(code, $catalogVersion)[unique=true]
+$products=products(code, $catalogVersion)
+$lang=en
+UPDATE Category;code[unique=true];$products;allowedPrincipals(uid)[default='customergroup'];$catalogVersion
+
+               ;1006;OCA_BP_00007,OCA_BP_00008;
+
+$productCatalog = oca-usProductCatalog
+$productCatalogName = Olympus Commerce Product Catalog
+$catalogVersion = catalogversion(catalog(id[default=$productCatalog]), version[default='Staged'])[unique=true, default=$productCatalog:Staged]
+$supercategories = supercategories(code, $catalogVersion)
+$baseProduct = baseProduct(code, $catalogVersion)
+$approved = approvalstatus(code)[default='approved']
+$lang = en
+
+UPDATE Product;code[unique=true];distributionChainStatus(code);materialGroup4(code);materialGroup(code);$catalogVersion
+              ;WT425212;DCS01;A13;MG9002;
+              ;WT425712;;A01;MG9002;
+              ;WT425112;DCS09;A13;MG9002;
+              ;130031;DCS29;;MG9002;
+              ;130032;DCS02;A18;MG9002;
+              ;130033;DCS19;A04;MG9002;
+              ;130096;DCS29;A13;MG9002;
+              ;130165;DCS01;A18;MG9000;
+              ;130166;;;MG9002;
+              ;130205;DCS39;A13;MG9002;
+              ;130213;DCS01;A01;MG9002;
+              ;130214;DCS07;A20;MG9000;
+              ;130262;DCS09;A01;MG9002;
+              ;130263;DCS29;A01;MG9002;
+              ;130567;DCS07;A26;MG9000;
+              ;WT645013;DCS19;A20;MG9002;
+              ;WT645016;DCS29;A20;MG9002;
+              ;WT645017;DCS01;A13;MG9002;
+              ;WT000879;DCS07;A01;MG9002;
+              ;WT000880;DCS39;A13;MG9002;
+              ;WT000881;DCS01;A04;MG9002;
+              ;WT000882;DCS07;A04;MG9002;
+              ;WT632060;DCS09;A13;MG9002;
+              ;WT632061;DCS29;A02;MG9002;
+              ;WT632062;DCS02;A04;MG9002;
+              ;WT632063;DCS19;A04;MG9002;
+              ;WT632064;DCS29;A13;MG9002;
+              ;WT632065;DCS01;A18;MG9000;
+              ;130561;DCS07;A05;MG9002;
+              ;130562;DCS39;A13;MG9002;
+              ;130045;DCS07;A20;MG9002;
+              ;130047;DCS09;A13;MG9002;
+              ;130103;DCS29;A01;MG9002;
+              ;130163;DCS02;A26;MG9000;
+              ;130211;DCS19;A20;MG9000;
+              ;130212;DCS29;A20;MG9000;
+              ;130248;DCS01;A13;MG9002;
+              ;130249;DCS07;A01;MG9002;
+              ;130252;DCS39;A13;MG9002;
+              ;130351;DCS01;A04;MG9002;
+              ;130352;DCS07;A04;MG9002;
+              ;130381;DCS09;A13;MG9002;
+              ;130382;DCS29;A02;MG9002;
+              ;130393;DCS02;A26;MG9001;
+              ;130401;DCS19;A20;MG9002;
+              ;130569;DCS29;A20;MG9002;
+              ;70131012;DCS01;A13;MG9002;
+              ;70135801;DCS07;A01;MG9002;
+              ;230857;DCS39;A13;MG9002;
+              ;WT997001;DCS01;A04;MG9002;
+              ;WT997030;DCS07;A04;MG9002;
+              ;WT997150;DCS09;A13;MG9002;
+              ;WT640003;DCS29;A02;MG9002;
+              ;WT952305;DCS02;A26;MG9001;
+              ;WT996050;DCS19;A20;MG9002;
+              ;131408;DCS29;A20;MG9002;
+              ;131414;DCS01;A05;MG9002;
+              ;131415;DCS07;A01;MG9002;
+              ;131416;DCS39;A13;MG9002;
+              ;230569;DCS01;A04;MG9002;
+              ;230570;DCS07;A04;MG9002;
+              ;230571;DCS09;A13;MG9002;
+              ;230096;DCS29;A02;MG9002;
+              ;WT230731;DCS02;A21;MG9000;
+              ;WT336726;DCS19;A20;MG9002;
+              ;WT336727;DCS29;A20;MG9002;
+              ;WT336728;DCS01;A13;MG9002;
+              ;WT336729;DCS01;A13;MG9002;
+              ;WT336730;;A01;MG9002;
+              ;WT336731;DCS09;A13;MG9002;
+              ;WT149602;DCS29;;MG9002;
+              ;WT149603;DCS02;A18;MG9002;
+              ;WT149604;DCS19;A04;MG9002;
+              ;WT149612;DCS29;A13;MG9002;
+              ;WT149613;DCS01;A18;MG9000;
+              ;WT149614;;;MG9002;
+              ;WT149702;DCS39;A13;MG9002;
+              ;WT149703;DCS01;A01;MG9002;
+              ;WT149704;DCS07;A20;MG9000;
+              ;WT266106;DCS09;A01;MG9002;
+              ;WT266115;DCS29;A01;MG9002;
+              ;WT266125;DCS07;A26;MG9000;
+              ;WT000883;DCS19;A20;MG9002;
+              ;WT632130;DCS29;A20;MG9002;
+              ;WT632131;DCS01;A13;MG9002;
+              ;130564;DCS07;A01;MG9002;
+              ;WT153902;DCS39;A13;MG9002;
+              ;WT153903;DCS01;A04;MG9002;
+              ;WT153905;DCS07;A04;MG9002;
+              ;WT153906;DCS09;A13;MG9002;
+              ;WT153907;DCS29;A02;MG9002;
+              ;WT153908;DCS02;A04;MG9002;
+              ;WT277312;DCS19;A04;MG9002;
+              ;WT512301;DCS29;A13;MG9002;
+              ;WT512302;DCS01;A18;MG9000;
+              ;WT416502;DCS07;A05;MG9002;
+              ;WT416505;DCS39;A13;MG9002;
+              ;WT416510;DCS07;A20;MG9002;
+              ;WT997000;DCS09;A13;MG9002;
+              ;WT000850;DCS29;A01;MG9002;
+              ;WT000851;DCS02;A26;MG9000;
+              ;WT000852;DCS19;A20;MG9000;
+              ;WT000854;DCS29;A20;MG9000;
+              ;WT000855;DCS01;A13;MG9002;
+              ;WT000860;DCS07;A01;MG9002;
+              ;WT254000;DCS39;A13;MG9002;
+              ;WT254100;DCS01;A04;MG9002;
+              ;WT254300;DCS07;A04;MG9002;
+              ;WT254600;DCS09;A13;MG9002;
+              ;WT254700;DCS29;A02;MG9002;
+              ;WT632026;DCS02;A26;MG9001;
+              ;WT632027;DCS19;A20;MG9002;
+              ;WT632028;DCS29;A20;MG9002;
+              ;WT526000;DCS01;A13;MG9002;
+              ;WT526010;DCS07;A01;MG9002;
+              ;WT526200;DCS39;A13;MG9002;
+              ;WT526300;DCS01;A04;MG9002;
+              ;WT525000;DCS07;A04;MG9002;

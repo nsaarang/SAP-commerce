@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+-->
+<!--
+	ATTENTION: This is just an example file. You have to edit it according to your needs.
+-->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO">
+		<property name="purchaseEnabled" type="boolean">
+			<description>Flag defining if product is available for add to cart</description>
+		</property>
+		<property name="otherVariants" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>">
+		</property>
+		<property name="baseProductName" type="String" />
+		<property name="nonPurchasableDisplayStatus" type="String"/>
+	</bean>
+
+	<bean class="com.olympus.oca.commerce.dto.user.CategoryHierarchyDataList">
+		<property name="categoryHierarchy" type="java.util.List&lt;de.hybris.platform.commercefacades.catalog.data.CategoryHierarchyData>" />
+	</bean>
+	<bean class="com.olympus.oca.commerce.dto.user.CategoryHierarchyListWsDTO">
+		<description>Representation of an category hierarchy list</description>
+		<hints>
+			<hint name="wsRelated" />
+			<hint name="alias">CategoryHierarchyList</hint>
+		</hints>
+		<property name="categoryHierarchy" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.catalog.CategoryHierarchyWsDTO>">
+			<description>List of category hierarchy</description>
+		</property>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.catalog.CategoryHierarchyWsDTO">
+		<property name="level" type="Integer">
+		</property>
+	</bean>
+
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.store.ShippingCarrierListWsDTO">
+		<property name="shippingCarriers" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.store.ShippingCarrierWsDTO>">
+		</property>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.store.ShippingCarrierWsDTO">
+		<property name="code" type="String" />
+		<property name="name" type="String" />
+		<property name="accountReferenceNumber" type="String" />
+	</bean>
+
+   <bean class="de.hybris.platform.commercewebservicescommons.dto.product.PurchaseOrderWsDTO">
+		<property name="purchaseOrderNumber" type="String"/>
+	</bean>
+
+	<!-- Changes for OEC-257 -->
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.CartWsDTO"
+		  extends="de.hybris.platform.commercewebservicescommons.dto.order.AbstractOrderWsDTO">
+		<property name="heavyOrder" type="String">
+			<description>Identifier to distinguish if the cart is a heavy order</description>
+		</property>
+		<property name="heavyOrderQuestions" type="com.olympus.oca.commerce.dto.order.HeavyOrderQuestionsCartWsDTO"/>
+		<property name="shipByGround" type="String">
+			<description>Identifier to distinguish if the cart has products that to have to be shipped by ground</description>
+		</property>
+	</bean>
+	<!-- End of Changes -->
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.DeliveryOptionListWsDTO">
+		<property name="deliveryOption" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.DeliveryOptionWsDTO>"></property>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.DeliveryOptionWsDTO">
+		<property name="code" type="String" />
+		<property name="name" type="String" />
+	</bean>
+	
+
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.RecentlyOrderedProductListWsDTO">
+		<property name="recentlyOrderedProducts" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.RecentlyOrderedProductWsDTO>">
+		</property>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.RecentlyOrderedProductWsDTO">
+		<property name="code" type="String" />
+		<property name="name" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderHistoryFiltersWsDTO">
+		<description>Representation of an Order history request</description>
+		<hints>
+			<hint name="wsRelated"/>
+			<hint name="alias">OrderHistoryFilters</hint>
+		</hints>
+		<property name="status" type="String"/>
+		<property name="accountNumber" type="String"/>
+		<property name="addressId" type="String"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderHistoryWsDTO">
+		<property name="entries"  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO>">
+		<description>List of order entries</description>
+		</property>
+		<property name="erpOrderNumber" type="String"/>
+		<property name="totalEntries" type="Integer"/>
+		<property name="creationTime" type="String"/>
+		<property name="totalPrice" type="String"/>
+		<property name="consignments"
+                  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.ConsignmentWsDTO>">
+            <description>List of consignment</description>
+        </property>
+	</bean>
+	<bean class="com.olympus.oca.commerce.dto.order.MiniCartWsDTO">              
+		<property name="code" type="String">
+            <description>Code number of order</description>
+        </property>
+		<property name="totalUnitCount" type="Integer">
+            <description>Total unit count</description>
+        </property>
+		<property name="displayTotalUnitCount" type="String">
+			<description>Total Mini Cart unit count</description>
+		</property>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO">
+	<property name="entries"  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO>">
+		</property>
+	<property name="otherVariants" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO>">
+		</property>
+		<property name="contractPrice" type="String"/>
+		<property name="formattedContractPrice" type="String"/>
+		<property name="freightPrice" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO">
+		<property name="units" type="java.util.List&lt;de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO>" />
+		<property name="accountPreferences" type="String"/>
+	</bean>
+
+
+	<bean class="de.hybris.platform.b2bwebservicescommons.dto.company.B2BUnitWsDTO">
+		<property name="defaultUnit" type="boolean" />
+	</bean>
+
+  <bean
+	class="de.hybris.platform.commercewebservicescommons.dto.search.facetdata.FacetWsDTO">
+	<property name="code" type="String" />
+ </bean>
+ 
+ <bean class="de.hybris.platform.commercewebservicescommons.dto.order.ConsignmentEntryWsDTO">
+	<property name="otherVariants"  type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.ConsignmentEntryWsDTO>">
+		</property>
+	</bean>
+
+	<bean class="com.olympus.oca.commerce.dto.order.HeavyOrderQuestionsCartWsDTO">
+		<property name="largeTruckEntry" type="Boolean"/>
+		<property name="liftAvailable" type="Boolean"/>
+		<property name="loadingDock" type="Boolean"/>
+		<property name="orderDeliveredInside" type="Boolean"	/>
+		<property name="name" type="String"/>
+		<property name="email" type="String"/>
+		<property name="phoneNumber" type="String"/>
+		<property name="truckSize" type="String"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.ConsignmentWsDTO">
+		<property name="statusMessage" type="String"/>
+		<property name="shippingDate" type="String"/>
+		<property name="consignmentStatus" type="String"/>
+
+	</bean>
+	<bean class="com.olympus.oca.commerce.dto.user.AccountPreferencesWsDTO">
+		<property name="accessType" type="String"/>
+	</bean>
+
+</beans>

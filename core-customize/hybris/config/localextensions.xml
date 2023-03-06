@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hybrisconfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../bin/platform/resources/schemas/extensions.xsd">
+	<extensions>
+		<!--
+				All extensions located in ${HYBRIS_BIN_DIR}/platform/ext are automatically loaded.
+				More information about how to configure available extensions can be found here : https://wiki.hybris.com/x/nZVzC
+		-->
+
+		<path dir="${HYBRIS_BIN_DIR}" />
+		
+		<!-- Extensions for the new OCA services, backoffice and solr -->
+		<extension name="ocabackoffice" />
+		<extension name="ocacore" />
+		<extension name="ocafacades" />
+		<extension name="ocainitialdata" />
+		<extension name="b2bcommerce" />
+		<extension name="b2bcommercebackoffice" />
+		<extension name="b2bcommercefacades" />
+		<extension name='solrfacetsearch' />
+		<extension name='solrfacetsearchbackoffice' />
+		<extension name='solrserver' />
+		<extension name ='ocaocc' />
+		<extension name ='b2bocc' />
+		<extension name ='ocaintegrations' />
+
+		<extension name ='odata2services' />
+		<extension name ='odata2webservices' />
+		<extension name ='integrationservices' />
+		<extension name ='integrationbackoffice' />
+		<extension name ='inboundservices' />
+		<extension name ='outboundservices' />
+		<extension name ='outboundsync' />
+		<extension name="integrationmonitoringbackoffice" />
+		<extension name="outboundsyncbackoffice" />
+		<extension name="sapcpiadapter"/>
+		<extension name="sapcpicustomerexchange"/>
+		<extension name="sapcpicustomerexchangeb2b"/>
+		<extension name="sapcpiorderexchange"/>
+		<extension name="sapcpiorderexchangeb2b"/>
+		<extension name="sapcpiproductexchange"/>
+		
+	</extensions>
+</hybrisconfig>

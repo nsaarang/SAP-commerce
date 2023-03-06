@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<extensioninfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="extensioninfo.xsd">
+    <extension abstractclassprefix="Generated" classprefix="OcaIntegration" name="ocaintegrations" usemaven="false">
+
+        <requires-extension name="outboundservices"/>
+
+        <coremodule generated="true" manager="com.olympus.oca.commerce.integrations.jalo.OcaintegrationsManager"
+                    packageroot="com.olympus.oca.commerce.integrations"/>
+    </extension>
+</extensioninfo>

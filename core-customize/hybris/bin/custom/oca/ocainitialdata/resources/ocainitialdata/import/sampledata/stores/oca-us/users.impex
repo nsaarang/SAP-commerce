@@ -1,0 +1,46 @@
+
+
+
+$customergroup=customergroup
+
+INSERT_UPDATE UserGroup;uid[unique=true];groups(uid);locname[lang=en];
+;OlympusAdminGroup;$customergroup;
+
+INSERT_UPDATE B2BUnit ;uid[unique=true] ;groups(uid)       ;&B2BUnitID; locname[lang=en];
+                     
+					  ;1010512          ;OlympusAdminGroup ;1010512; Account 1010512
+					  ;1010513          ;OlympusAdminGroup ;1010513; Account 1010513
+					  ;1010514          ;OlympusAdminGroup ;1010514; Account 1010514
+					  ;1010515          ;OlympusAdminGroup ;1010515; Account 1010515
+					  ;1010516          ;OlympusAdminGroup ;1010516; Account 1010516
+
+
+INSERT_UPDATE B2BCustomer ;uid[unique=true] 	;email       		;name  		;groups(uid)
+						  ;mark@gmail.com   	;mark@gmail.com 	;Mark    	;1010512
+						  ;carla@gmail.com      ;carla@gmail.com 	;Carla  	;1010513,1010514
+						  ;shaun@gmail.com     	;shaun@gmail.com 	;Shaun  	;1010514,1010515,1010512
+						  ;murphy@gmail.com     ;murphy@gmail.com 	;Murphy  	;1010512,1010515
+						  ;clarie@gmail.com     ;clarie@gmail.com 	;Clarie  	;1010515,1010513,1010514
+						  ;morgan@gmail.com     ;morgan@gmail.com 	;Morgan  	;1010512,1010514,1010515					  
+						  
+						  
+
+
+INSERT_UPDATE Address	;streetname[unique=true] 		;postalcode[unique=true]   ;town            ;country(isocode)      ;billingAddress    ;contactAddress     ;shippingAddress      ;unloadingAddress        ;&addId			;owner(&B2BUnitID)[unique=true];
+						;77770 South Wacker Drive 		;60606                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74146			;1010512
+						;3000 Lombard Street  			;94123                     ;San Francisco   ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74147			;1010513
+						;700 E 50th Street   			;10022                     ;New York        ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74148			;1010514
+						;11000 Bagby Street Houston  	;60606                     ;Houston         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74149			;1010515
+						;3000 Canyon Lake Drive  		;90068                     ;Los Angeles     ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74140			;1010516
+						;77770 South Wacker Drive  		;60606                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74141			;1010516
+						;6533 South  				    ;94123                     ;Houston         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74142		    ;1010515
+						;8888 Drive  					;94123                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr75142			;1010514
+						;2121 South  				    ;60606                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74143			;1010513
+						;75732 Drive  					;60606                     ;Houston         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74144			;1010512
+						;6262 South  				    ;60606                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr74145			;1010512
+						;456454 Drive  					;94123                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr84146			;1010513
+						;6363 South  				    ;60606                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr94146			;1010514
+						;1232 Drive  					;60606                     ;Chicago         ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr24146		    ;1010514
+						;642 South  				    ;94123                     ;San Francisco   ;US                    ;FALSE              ;TRUE               ;TRUE                 ;TRUE                   ;addr34146			;1010515
+					
+					 

@@ -1,0 +1,106 @@
+{
+   "aspects": [
+      {
+         "name": "backoffice",
+         "webapps": [
+            {
+               "contextPath": "/hac",
+               "name": "hac"
+            },
+            {
+               "contextPath": "/medias",
+               "name": "mediaweb"
+            },
+            {
+               "contextPath": "/backoffice",
+               "name": "backoffice"
+            }
+         ]
+      },
+     {
+            "name": "backgroundProcessing",
+            "webapps": [
+                {
+                    "name": "hac",
+                    "contextPath": "/hac"
+                },
+                {
+                    "name": "mediaweb",
+                    "contextPath": "/medias"
+                },
+                {
+               		"contextPath": "/odata2webservices",
+               		"name": "odata2webservices"
+            	}
+            ]
+        },
+      {
+         "name": "api",
+         "properties": [ ],
+         "webapps": [
+            {
+               "contextPath": "/occ",
+               "name": "commercewebservices"
+            },
+            {
+               "contextPath": "/authorizationserver",
+               "name": "oauth2"
+            },
+            {
+               "contextPath": "/permissionswebservices",
+               "name": "permissionswebservices"
+            },
+            {
+               "contextPath": "/previewwebservices",
+               "name": "previewwebservices"
+            }
+         ]
+      }
+   ],
+   "commerceSuiteVersion": "2205.4",
+   "extensions": [
+     
+   ],
+"extensionPacks" : [
+	{
+		"name" : "hybris-commerce-integrations",
+		"version" : "2205.0"
+	}
+	],
+   "storefrontAddons": [
+   ],
+   "useCloudExtensionPack": false,
+   "useConfig": {
+    "properties": [
+      {
+        "location": "hybris/config/environments/commons.properties"
+      },
+      {
+        "location": "hybris/config/environments/development/customer.properties",
+        "persona": "development"
+      },
+    
+      {
+        "location": "hybris/config/environments/development/customer.backoffice.properties",
+        "aspect": "backoffice",
+        "persona": "development"
+      },
+      {
+        "location": "hybris/config/environments/development/customer.background-processing.properties",
+        "aspect": "backgroundProcessing",
+        "persona": "development"
+      },
+      {
+        "location": "hybris/config/environments/development/customer.api.properties",
+        "aspect": "api",
+        "persona": "development"
+      }
+    ],
+    "extensions": {
+      "location": "hybris/config/localextensions.xml"
+    },
+    "solr": {
+      "location": "solr"
+    }
+  }
+}
