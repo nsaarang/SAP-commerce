@@ -1,50 +1,35 @@
-# Java Gradle CircleCI 2.0 configuration file
-# See: https://circleci.com/docs/2.0/language-java/
 version: 2.1
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  sap-build:
     docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: navoday/hybrisojdk
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: gradle dependencies
-
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      # run tests!
-      - run: gradle test
+      - run:
+          name: Install Sonarqube scanner
+          command: |
+            apt-get update -y
+            apt-get install wget -y
+            wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+            unzip sonar-scanner-cli-4.8.0.2856-linux.zip
+      - run:
+          name: Run Sonarscanner
+          command: |
+            cd /opt/hybris/bin/platform
+            export SONAR_SCANNER_OPTS="-Xmx2048m"
+            ant clean test || true
+            ant sonarcheck -Dsonar.sources=. -Dsonar.inclusions=core-customize/hybris/bin/custom -Dsonar.exclusions=gensrc/**,src/**/jalo/**,src/**/*Standalone.java,src/**/*Constants.java,src/**/data/**,src/**/patch/** -Dant.test.failure.ignore=true -Dsonar.tests=core-customize/hybris/bin/custom/test -Dsonar.junit.reportPaths=core-customize/hybris/bin/custom/test-reports -Dsonar.projectKey=OCA -Dsonar.host.url=https://sonar.deloittedigital.studio -Dsonar.login=a8cf16b7391d1872c4660d2d7054833ae4d8dc8d
+      - run:
+          name: Build sap code 
+          command: |
+            cp -rf core-customize/hybris/bin/custom /opt/hybris/bin/
+            cp -rf core-customize/hybris/config/localdev.properties /opt/hybris/config/local.properties
+            cp -rf core-customize/hybris/config/localextensions.xml /opt/hybris/config
+            chmod -R 777 /opt/hybris/bin/platform
+            cd /opt/hybris/bin/platform
+            ./setantenv.sh
+            ant clean all 
 workflows:
-  graddle_build:
+  build:
     jobs:
-      - build
+      - sap-build
