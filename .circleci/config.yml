@@ -28,7 +28,7 @@ jobs:
             cd /opt/hybris/bin/platform
             export SONAR_SCANNER_OPTS="-Xmx2048m"
             ant clean test || true
-            ant sonarcheck -Dsonar.sources=. -Dsonar.exclusions=gensrc/**,src/**/jalo/**,src/**/*Standalone.java,src/**/*Constants.java,src/**/data/**,src/**/patch/** -Dant.test.failure.ignore=true -Dsonar.projectKey=OCA -Dsonar.host.url=https://sonar.deloittedigital.studio -Dsonar.login=a8cf16b7391d1872c4660d2d7054833ae4d8dc8d
+            ant sonarcheck -Dsonar.sources=. -Dsonar.inclusions=core-customize/hybris/bin/custom -Dsonar.exclusions=gensrc/**,src/**/jalo/**,src/**/*Standalone.java,src/**/*Constants.java,src/**/data/**,src/**/patch/** -Dsonar.tests=core-customize/hybris/bin/custom/test -Dsonar.junit.reportPaths=core-customize/hybris/bin/custom/test-reports -Dant.test.failure.ignore=true -Dsonar.projectKey=OCA -Dsonar.host.url=https://sonar.deloittedigital.studio -Dsonar.login=a8cf16b7391d1872c4660d2d7054833ae4d8dc8d
 workflows:
   build:
     jobs:
