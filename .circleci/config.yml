@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: navoday/hybrisojdk
     environment:
-      XML_REPORT_PATHS: "#core-customize/hybris/bin/custom/oca/ocacore/buildcallbacks.xml"
+      XML_REPORT_PATHS: "core-customize/hybris/bin/custom/oca/ocacore/buildcallbacks.xml"
     steps:
       - checkout
       - run:
